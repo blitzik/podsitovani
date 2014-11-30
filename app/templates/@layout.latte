@@ -8,7 +8,7 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>{ifset #title}{include title|striptags} | {/ifset}Nette Sandbox</title>
+	<title>IPv4 podsíťování VLSM</title>
 
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/dashboard.css">
@@ -21,7 +21,7 @@
 
 	<div id="container">
 		<div id="wrapper">
-		<h1>IPv4 podsíťování [VLSM]</h1>
+			<h1><a href="{link Homepage:default}">Pv4 podsíťování [VLSM]</a></h1>
 		<div id="content">
 			<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{!$flash->message}</div>
 			{include content}

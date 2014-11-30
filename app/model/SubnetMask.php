@@ -47,12 +47,21 @@ use \Nette\Utils\Validators;
 		{
 			return $this->cidr;
 		}
-
+		
+		/**
+		 * 
+		 * @return IpAddress
+		 */
 		public function getWildCard()
 		{
 			return $this->wildCard;
 		}
 
+		/**
+		 * 
+		 * @param String $subnetMask
+		 * @return IpAddress
+		 */
 		private function createWildCard($subnetMask)
 		{
 			$mask = ip2long($subnetMask);

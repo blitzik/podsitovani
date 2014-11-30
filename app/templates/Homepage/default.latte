@@ -1,0 +1,80 @@
+{block content}
+	{form calculatorForm}
+		<table>
+			<tr><th>{label ip /}</th><th>{label mask /}</th></tr>
+			<tr><td>{input ip}</td><td>{input mask}</td></tr>
+			<tr><td colspan="2">{label hosts /} <small>(Př: 65, 24, 120)</small></td></tr>
+			<tr><td colspan="2">{input hosts}</td></tr>
+			<tr><td colspan="2">{input send}</td></tr>
+		</table>
+
+	{/form calculatorForm}
+
+	{if $network}
+	<div class="networkInfo">
+		<h2>Informace o síti</h2>
+		<div class="box">
+
+			<h3>{$network->getNetwork()->getIpAddress()}/{$network->getNetwork()->getSubnetMask()->getCIDR()}
+				<small>[{if $network->getNetwork()->isPrivate()}Privátní{else}Veřejná{/if} IP]</small></h3>
+
+			{var $dn = $network->getNetwork()}
+			<table>
+				<tr><th>Max. hostů</th><td>{$dn->getNumberOfValidHosts()}</td></tr>
+				<tr><th>Prefix</th><td>/{$dn->getSubnetMask()->getCIDR()}</td></tr>
+				<tr><th>Maska</th><td>{$dn->getSubnetMask()}</td></tr>
+				<tr><th>WildCard</th><td>{$dn->getSubnetMask()->getWildCard()}</td></tr>
+				<tr><th>Adresa sítě</th><td>{$dn->getNetworkAddress()}</td></tr>
+				<tr><th>Broadcast</th><td>{$dn->getBroadcastAddress()}</td></tr>
+				<tr><th>Rozsah</th><td>{$dn->getFirstValidHost()} - {$dn->getLastValidHost()}</td></tr>
+			</table>
+		</div>
+	</div>
+	<div class="results">
+
+		{var $subnets = $network->getAllResults()}
+		{if $subnets}
+
+		<h2>Podsítě</h2>
+		<div class="box">
+			{if $network->getNetwork()->getSubnetMask()->getCIDR() <= $subnets[0]->getSubnetMask()->getCIDR()}
+			<table>
+				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th><th>Adresa sítě</th><th>Broadcast</th><th>Rozsah adres pro hosty</th></tr>
+
+				{foreach $subnets as $subnet}
+
+					<tr{if !$network->getNetwork()->isIPFromNetwork($subnet->getBroadCastAddress())} class="behind"{/if}>
+						<td><small>(+2)</small> {$network->getNetworkHosts()[$iterator->getCounter()-1]-2}</td>
+						<td>{$subnet->getNumberOfValidHosts() + 2}</td>
+						<td>/{$subnet->getSubnetMask()->getCIDR()}</td>
+						<td><a title="{$subnet->getSubnetMask()->getAddressInBinary()}">{$subnet->getSubnetMask()}</a></td>
+						<td><a title="{$subnet->getNetworkAddress()->getAddressInBinary()}">{$subnet->getNetworkAddress()}</a></td>
+						<td><a title="{$subnet->getBroadcastAddress()->getAddressInBinary()}">{$subnet->getBroadcastAddress()}</a></td>
+						<td>{$subnet->getFirstValidHost()} - {$subnet->getLastValidHost()}</td>
+					</tr>
+				{/foreach}
+
+			</table>
+			{else}
+				<p>Nelze vytvořit všechny podsítě z důvodu nedostatečného rozsahu původní sítě.
+					Chybí <b>{$network->getTotalNumberOfBlockAddresses() - $network->getNetwork()->getNumberOfValidHosts() + 2}</b>
+				   adres.</p>
+				<table>
+					<tr><th>Síť [Počet hostů]</th><th>Blok adres pro síť</th></tr>
+					{foreach $subnets as $subnet}
+						<tr><td>{$network->getNetworkHosts()[$iterator->getCounter()-1]-2}<small>(+2)</small></td><td>{$subnet->getNumberOfValidHosts() + 2}</td></tr>
+					{/foreach}
+
+					<tr><th>Potřeba adres</th><td>{$network->getTotalNumberOfBlockAddresses()}</td></tr>
+					<tr><th>Dostupných adres</th><td>{$network->getNetwork()->getNumberOfValidHosts() + 2}</td></tr>
+				</table>
+			{/if}
+
+		</div>
+
+		{/if}
+	</div>
+	{/if}
+
+
+{/block}

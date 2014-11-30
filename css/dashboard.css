@@ -1,0 +1,98 @@
+body{
+      background-color: #484F5C;
+	 color: #D1D6E7;
+}
+
+#container{
+			position: relative;
+			right: 50%;
+			margin: 0 auto;
+			border: 0px solid green;
+			float: right;
+}
+
+#wrapper {
+		clear: left;
+		float: left;
+		position: relative;
+		left: 50%;
+		border: 0px solid red;
+}
+
+.behind{
+		background-color: #FFADC0;
+}
+
+#content{
+		background-color: #6D778A;
+		padding: 25px;
+		overflow: auto;
+}
+
+#calcForm{
+		margin-right: 30px;
+		float: left;
+}
+
+.networkInfo{
+			float: right;
+			overflow: auto;
+}
+
+.results{
+		margin-top: 25px;
+}
+
+.box{
+		color: #000;
+		background-color: #fff;
+		padding: 25px;
+		float: left;
+		overflow: auto;
+		margin: 20px 0;
+}
+
+.box table {
+			border-collapse: collapse;
+}
+
+.box th,
+.box td{
+			border: 1px solid #6D778A;
+			padding: 5px;
+}
+
+.box th{
+			background-color: #E5E5E5;
+}
+
+.networkInfo .box{
+			margin: 0;
+}
+
+h1, h2, h3{
+		margin: 0;
+		color: #FFF;
+}
+
+h1{
+	font-size: 190%;
+}
+
+h2{
+	clear: both;
+}
+
+
+h3{
+	color: #000;
+}
+
+form input{
+			padding: 8px;
+			font-size: 115%;
+}
+
+label{
+		color: #D1D6E7;
+}

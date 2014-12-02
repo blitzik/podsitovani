@@ -68,7 +68,7 @@ namespace Model;
 		{
 			$hosts = $this->checkNumberOfHosts($hosts);
 
-			return (int)pow(2, (ceil(log($hosts + 2, 2))));
+			return (int)pow(2, (ceil(log($hosts, 2))));
 		}
 
 		/**

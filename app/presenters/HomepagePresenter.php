@@ -19,16 +19,12 @@ use \Nette\Application\UI\Form;
 
 		public function renderDefault()
 		{
-			/*$ip = new \Model\IpAddress('192.168.0.0');
-			$mask = new \Model\SubnetMask('/23');
+			/*$ip = new \Model\IpAddress('199.190.111.0');
+			$mask = new \Model\SubnetMask('/24');
 			$network = new \Model\Network($ip, $mask);
-			$vlsm = new \Model\VLSMCalculator($network, '314, 45, 19, 134');
+			$vlsm = new \Model\VLSMCalculator($network, '63,8,5,24,2,2,2');
 
-			$subnetwork = new \Model\Subnetwork($ip, $mask, '127');
-
-			\Tracy\Debugger::dump($subnetwork->getBlockOfAddresses());
-			\Tracy\Debugger::dump($subnetwork->getNumberOfValidHosts());
-			\Tracy\Debugger::dump($subnetwork->isNetworkRangeBigEnough());*/
+			\Tracy\Debugger::dump($vlsm->getAllResults());*/
 
 			$this->template->network = $this->network;
 		}

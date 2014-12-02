@@ -47,8 +47,8 @@ namespace Model;
 			$this->ipAddress = $ipAddress;
 			$this->subnetMask = $mask;
 
-			$this->networkAddress = new IpAddress($this->findNetworkAddress());
-			$this->broadcastAddress = new IpAddress($this->findBroadcastAddress());
+			$this->networkAddress = $this->findNetworkAddress();
+			$this->broadcastAddress = $this->findBroadcastAddress();
 
 			$this->firstValidHost = $this->calcFirstValidHostAddress();
 			$this->lastValidHost = $this->calcLastValidHostAddress();
@@ -56,33 +56,33 @@ namespace Model;
 
 		/**
 		 *
-		 * @return String
+		 * @return IpAddress
 		 */
-		private function findNetworkAddress()
+		protected function findNetworkAddress()
 		{
 			$ip = ip2long($this->ipAddress->getAddress());
 			$sm = ip2long($this->subnetMask->getAddress());
 
-			return long2ip($ip & $sm);
+			return new IpAddress(long2ip($ip & $sm));
 		}
 
 		/**
 		 *
-		 * @return String
+		 * @return IpAddress
 		 */
-		private function findBroadcastAddress()
+		protected function findBroadcastAddress()
 		{
 			$networkAddress = ip2long($this->networkAddress->getAddress());
 			$mask = ip2long($this->subnetMask->getAddress());
 
-			return long2ip($networkAddress + (~$mask));
+			return new IpAddress(long2ip($networkAddress + (~$mask)));
 		}
 
 		/**
 		 *
 		 * @return \Model\IpAddress
 		 */
-		private function calcFirstValidHostAddress()
+		protected function calcFirstValidHostAddress()
 		{
 			return new IpAddress(long2ip(sprintf('%u', ip2long($this->networkAddress->getAddress())) + 1));
 		}
@@ -91,7 +91,7 @@ namespace Model;
 		 *
 		 * @return \Model\IpAddress
 		 */
-		private function calcLastValidHostAddress()
+		protected function calcLastValidHostAddress()
 		{
 			return new IpAddress(long2ip(sprintf('%u', ip2long($this->networkAddress->getAddress())) + $this->getNumberOfValidHosts()));
 		}

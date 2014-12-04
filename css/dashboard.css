@@ -29,18 +29,49 @@ body{
 		overflow: auto;
 }
 
+.menu{
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	overflow: auto;
+	border: 0px solid red;
+}
+
+.menu li{
+		float: left;
+		margin-right: 5px;
+}
+
+.menu li a{
+		padding: 6px 10px;
+		color: #FFF;
+		display: block;
+		background-color: #A5B2C9;
+		text-decoration: none;
+}
+
+.menu li a:hover{
+		background-color: #6D778A;
+}
+
+.menu li a.selected{
+		background-color: #6D778A;
+}
+
 #calcForm{
-		margin-right: 30px;
 		float: left;
 }
 
 .networkInfo{
 			float: right;
+			margin-left: 30px;
 			overflow: auto;
 }
 
 .results{
-		margin-top: 25px;
+		border: 0px solid red;
+		overflow: auto;
+		clear: both;
 }
 
 .box{
@@ -64,6 +95,11 @@ body{
 
 .box th{
 			background-color: #E5E5E5;
+}
+
+.subnetting-failed{
+				background-color: #FFADC0;
+				color: #7D2A3E;
 }
 
 .networkInfo .box{

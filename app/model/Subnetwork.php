@@ -24,12 +24,19 @@ namespace Model;
 			parent::__construct($ipAddress, $mask);
 		}
 
-
+		/**
+		 *
+		 * @return IpAddress
+		 */
 		protected function findNetworkAddress()
 		{
 			return $this->getIpAddress();
 		}
 
+		/**
+		 *
+		 * @return IpAddress
+		 */
 		protected function findBroadcastAddress()
 		{
 			$networkAddress = ip2long($this->getNetworkAddress()->getAddress());
@@ -38,6 +45,10 @@ namespace Model;
 			return new IpAddress($broadcast);
 		}
 
+		/**
+		 *
+		 * @return IpAddress
+		 */
 		protected function calcLastValidHostAddress()
 		{
 			return new IpAddress(long2ip(ip2long($this->getBroadcastAddress()->getAddress()) - 1));

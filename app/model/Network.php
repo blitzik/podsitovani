@@ -201,7 +201,7 @@ namespace Model;
 
 		public function __toString()
 		{
-			$output = 'IP: ' .$this->ipAddress->getAddress(). '/' .$this->subnetMask->getCIDR(). '<br>'
+			$output = 'IP: ' .$this->ipAddress->getAddress(). '/' .$this->subnetMask->getPrefix(). '<br>'
 			                 .$this->ipAddress->getAddressInBinary(). '<br>'
 
 					.'Subnet Mask: ' .$this->subnetMask->getAddress(). '<br>'

@@ -52,12 +52,12 @@ namespace Model;
 			}
 		}
 
-		/*public function getTotalNumberOfHosts()
+		public function getTotalNumberOfHosts()
 		{
 			$boa = $this->getTotalNumberOfBlockAddresses();
 
 			return $boa - (2 * count($this->networkHosts));
-		}*/
+		}
 
 		public function getTotalNumberOfBlockAddresses()
 		{
@@ -173,7 +173,7 @@ namespace Model;
 
 						$result .= '<td>' .$this->networkHosts[$i]. '</td>'.
 							'<td>' .($network->getNumberOfValidHosts() + 2). '</td>'.
-						     '<td>' .$network->getSubnetMask()->getCIDR(). '</td>'.
+						     '<td>' .$network->getSubnetMask()->getPrefix(). '</td>'.
 						     '<td>' .$network->getSubnetMask()->getAddress(). '</td>'.
 						     '<td>' .$network->getNetworkAddress()->getAddress(). '</td>'.
 						     '<td>' .$network->getBroadcastAddress()->getAddress(). '</td>';

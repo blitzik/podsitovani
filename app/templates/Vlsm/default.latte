@@ -1,0 +1,54 @@
+{block content}
+	{form calculatorForm}
+		<table>
+			<tr><th>{label ip /}</th><th>{label mask /}</th></tr>
+			<tr><td>{input ip}</td><td>{input mask}</td></tr>
+			<tr><td colspan="2">{label hosts /} <small>(Př: 65, 24, 120)</small></td></tr>
+			<tr><td colspan="2">{input hosts}</td></tr>
+			<tr><td colspan="2">{input send}</td></tr>
+		</table>
+
+	{if $network}
+		{if !$network->isNetworkRangeBigEnough()}
+			<p class="box subnetting-failed" style="clear: left;">
+				Podsíťování selhalo! Nelze vytvořit všechny požadované sítě.
+			</p>
+		{/if}
+	{/if}
+	{/form calculatorForm}
+
+	{if $network}
+	<div class="networkInfo">
+		{control networkInfo}
+	</div>
+	<div class="results">
+		{var $subnets = $network->getAllResults()}
+		{if $subnets}
+		<h2>Podsítě</h2>
+		<div class="box">
+			<table>
+				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th><th>Adresa sítě</th><th>Broadcast</th><th>Rozsah adres pro hosty</th></tr>
+
+				{foreach $subnets as $subnet}
+
+					<tr{if !$network->getNetwork()->isIPFromNetwork($subnet->getBroadcastAddress())} class="behind"{/if}>
+						<td><small>(+2)</small> {$network->getNetworkHosts()[$iterator->getCounter()-1]-2}</td>
+						<td>{$subnet->getNumberOfValidHosts() + 2}</td>
+						<td>/{$subnet->getSubnetMask()->getPrefix()}</td>
+						<td><a title="{$subnet->getSubnetMask()->getAddressInBinary()}">{$subnet->getSubnetMask()}</a></td>
+						<td><a title="{$subnet->getNetworkAddress()->getAddressInBinary()}">{$subnet->getNetworkAddress()}</a></td>
+						<td><a title="{$subnet->getBroadcastAddress()->getAddressInBinary()}">{$subnet->getBroadcastAddress()}</a></td>
+						<td>{$subnet->getFirstValidHost()} - {$subnet->getLastValidHost()}</td>
+					</tr>
+				{/foreach}
+
+			</table>
+
+		</div>
+
+		{/if}
+	</div>
+	{/if}
+
+
+{/block}

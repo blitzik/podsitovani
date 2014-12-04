@@ -11,7 +11,7 @@ use \Nette\Utils\Validators;
 		 *
 		 * @var Integer
 		 */
-		private $cidr;
+		private $prefix;
 
 		/**
 		 *
@@ -21,17 +21,17 @@ use \Nette\Utils\Validators;
 
 		public function __construct($subnetMask)
 		{
-			if ($this->hasCIDRFormat($subnetMask)) {
+			if ($this->hasPrefixFormat($subnetMask)) {
 
-				$this->cidr = str_replace('/', '', $subnetMask);
-				$this->address = $this->cidr2mask($this->cidr);
+				$this->prefix = str_replace('/', '', $subnetMask);
+				$this->address = $this->cidr2mask($this->prefix);
 
 			} else {
 
 				if (!$this->hasIPaddressValidFormat($subnetMask)) {
 					throw new \LogicExceptions\InvalidSubnetMaskException('Address ' .$subnetMask. ' is NOT a valid Subnet Mask / Prefix.');
 				}
-				$this->cidr = (int)$this->mask2cidr($subnetMask);
+				$this->prefix = (int)$this->mask2cidr($subnetMask);
 				$this->address = $subnetMask;
 			}
 
@@ -43,9 +43,9 @@ use \Nette\Utils\Validators;
 		 *
 		 * @return int
 		 */
-		public function getCIDR()
+		public function getPrefix()
 		{
-			return $this->cidr;
+			return $this->prefix;
 		}
 		
 		/**
@@ -107,7 +107,7 @@ use \Nette\Utils\Validators;
 		 * @param string $cidr
 		 * @return boolean
 		 */
-		private function hasCIDRFormat($cidr)
+		private function hasPrefixFormat($cidr)
 		{
 			if (!preg_match('~^[\/]?([1-9]|1[0-9]{1}|2[0-9]{1}|3[012]{1})$~', $cidr)) {
 				return FALSE;

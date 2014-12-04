@@ -1,0 +1,13 @@
+<div class="box">
+	<table>
+		<tr><th>Typ</th><td>{if $network->isPrivate()}Privátní{else}Veřejná{/if} IP</td></tr>
+		<tr><th>IP adresa</th><td>{$network->getIpAddress()}</td></tr>
+		<tr><th>Prefix</th><td>/{$network->getSubnetMask()->getPrefix()}</td></tr>
+		<tr><th>Maska</th><td>{$network->getSubnetMask()}</td></tr>
+		<tr><th>Max. hostů</th><td>{$network->getNumberOfValidHosts()}</td></tr>
+		<tr><th>WildCard</th><td>{$network->getSubnetMask()->getWildCard()}</td></tr>
+		<tr><th>Adresa sítě</th><td>{$network->getNetworkAddress()}</td></tr>
+		<tr><th>Broadcast</th><td>{$network->getBroadcastAddress()}</td></tr>
+		<tr><th>Rozsah</th><td>{$network->getFirstValidHost()} - {$network->getLastValidHost()}</td></tr>
+	</table>
+</div>

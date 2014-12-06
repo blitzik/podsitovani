@@ -10,23 +10,16 @@ use \Nette\Application\UI\Form;
 		 *
 		 * @var \Model\VLSMCalculator
 		 */
-		private $vlsmNetwork;
+		private $vlsmCalculator;
 
 		public function renderDefault()
 		{
-			/*$ip = new \Model\IpAddress('199.190.111.0');
-			$mask = new \Model\SubnetMask('/24');
-			$network = new \Model\Network($ip, $mask);
-			$vlsm = new \Model\VLSMCalculator($network, '63,8,5,24,2,2,2');
-
-			\Tracy\Debugger::dump($vlsm->getAllResults());*/
-
-			$this->template->network = $this->vlsmNetwork;
+			$this->template->calculator = $this->vlsmCalculator;
 		}
 
 		protected function createComponentNetworkInfo()
 		{
-			$networkInfo = new \Model\Components\NetworkInfo($this->vlsmNetwork->getNetwork());
+			$networkInfo = new \Model\Components\NetworkInfo($this->vlsmCalculator->getNetwork());
 
 			return $networkInfo;
 		}
@@ -57,9 +50,9 @@ use \Nette\Application\UI\Form;
 
 					$network = new \Model\Network($ipAddress, $subnetMask);
 
-					$VLSMNetwork = new \Model\VLSMCalculator($network, $values['hosts']);
+					$VLSMCalculator = new \Model\VLSMCalculator($network, $values['hosts']);
 
-					$this->vlsmNetwork = $VLSMNetwork;
+					$this->vlsmCalculator = $VLSMCalculator;
 
 			} catch (\LogicExceptions\InvalidIpAddressException $ip) {
 

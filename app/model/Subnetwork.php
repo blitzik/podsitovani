@@ -113,4 +113,9 @@ namespace Model;
 			return $this->blockOfAddresses;
 		}
 
+		public function getAmountOfUsedAddressSpace()
+		{
+			return number_format((($this->hosts/$this->blockOfAddresses)*100), 1, ',', ' ');
+		}
+
 	}

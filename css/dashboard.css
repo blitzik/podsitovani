@@ -29,7 +29,8 @@ body{
 		overflow: auto;
 }
 
-.menu{
+.menu,
+.nav{
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
@@ -37,9 +38,14 @@ body{
 	border: 0px solid red;
 }
 
-.menu li{
+.menu li,
+.nav li{
 		float: left;
 		margin-right: 5px;
+}
+
+.nav li{
+		margin-right: 20px;
 }
 
 .menu li a{
@@ -50,8 +56,16 @@ body{
 		text-decoration: none;
 }
 
+.nav li a{
+		color: #FFF;
+}
+
 .menu li a:hover{
 		background-color: #6D778A;
+}
+
+.nav li a:hover{
+		text-decoration: none;
 }
 
 .menu li a.selected{
@@ -98,6 +112,7 @@ body{
 }
 
 .subnetting-failed{
+				width: 400px;
 				background-color: #FFADC0;
 				color: #7D2A3E;
 }

@@ -199,25 +199,4 @@ namespace Model;
 			return (($ipDec >= $firstDec AND $ipDec <= $lastDec) ? TRUE : FALSE);
 		}
 
-		public function __toString()
-		{
-			$output = 'IP: ' .$this->ipAddress->getAddress(). '/' .$this->subnetMask->getPrefix(). '<br>'
-			                 .$this->ipAddress->getAddressInBinary(). '<br>'
-
-					.'Subnet Mask: ' .$this->subnetMask->getAddress(). '<br>'
-								  .$this->subnetMask->getAddressInBinary(). '<br>'
-
-					.'Network Address: ' .$this->networkAddress->getAddress(). '<br>'
-									 .$this->networkAddress->getAddressInBinary(). '<br>'
-
-					.'Broadcast Address: ' .$this->broadcastAddress->getAddress(). '<br>'
-									   .$this->broadcastAddress->getAddressInBinary(). '<br>';
-
-			$range = $this->getNetworkRangeOfAddresses();
-
-			$output .= 'Range of valid hosts: ' .$range['first']->getAddress(). ' - ' .$range['last']->getAddress(). '<br>'
-					 .'Number of hosts: ' .$this->getNumberOfValidHosts();
-			return $output;
-		}
-
 	}

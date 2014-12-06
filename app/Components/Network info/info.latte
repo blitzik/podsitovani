@@ -1,13 +1,14 @@
 <div class="box">
 	<table>
 		<tr><th>Typ</th><td>{if $network->isPrivate()}Privátní{else}Veřejná{/if} IP</td></tr>
-		<tr><th>IP adresa</th><td>{$network->getIpAddress()}</td></tr>
+		<tr><th>IP adresa</th><td><a title="{$network->getIpAddress()->getAddressInBinary()}">{$network->getIpAddress()}</a></td></tr>
 		<tr><th>Prefix</th><td>/{$network->getSubnetMask()->getPrefix()}</td></tr>
-		<tr><th>Maska</th><td>{$network->getSubnetMask()}</td></tr>
-		<tr><th>Max. hostů</th><td>{$network->getNumberOfValidHosts()}</td></tr>
-		<tr><th>WildCard</th><td>{$network->getSubnetMask()->getWildCard()}</td></tr>
-		<tr><th>Adresa sítě</th><td>{$network->getNetworkAddress()}</td></tr>
-		<tr><th>Broadcast</th><td>{$network->getBroadcastAddress()}</td></tr>
-		<tr><th>Rozsah</th><td>{$network->getFirstValidHost()} - {$network->getLastValidHost()}</td></tr>
+		<tr><th>Maska</th><td><a title="{$network->getSubnetMask()->getAddressInBinary()}">{$network->getSubnetMask()}</a></td></tr>
+		<tr><th>WildCard</th><td><a title="{$network->getSubnetMask()->getWildCard()->getAddressInBinary()}">{$network->getSubnetMask()->getWildCard()}</a></td></tr>
+		<tr><th>Adresa sítě</th><td><a title="{$network->getNetworkAddress()->getAddressInBinary()}">{$network->getNetworkAddress()}</a></td></tr>
+		<tr><th>Broadcast</th><td><a title="{$network->getBroadcastAddress()->getAddressInBinary()}">{$network->getBroadcastAddress()}</a></td></tr>
+		<tr><th>Rozsah</th><td><a title="{$network->getFirstValidHost()->getAddressInBinary()}">{$network->getFirstValidHost()}</a> -
+						   <a title="{$network->getLastValidHost()->getAddressInBinary()}">{$network->getLastValidHost()}</a></td></tr>
+		<tr><th>Max. hostů</th><td>{$network->getNumberOfValidHosts()|number:0:',':' '}</td></tr>
 	</table>
 </div>

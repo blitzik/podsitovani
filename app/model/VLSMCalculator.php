@@ -52,13 +52,30 @@ namespace Model;
 			}
 		}
 
-		public function getTotalNumberOfHosts()
+		/**
+		 *
+		 * @return int
+		 */
+		public function getTotalNumberOfHostsInBlocks()
 		{
 			$boa = $this->getTotalNumberOfBlockAddresses();
 
-			return $boa - (2 * count($this->networkHosts));
+			return (int)($boa - (2 * count($this->networkHosts)));
 		}
 
+		/**
+		 *
+		 * @return int
+		 */
+		public function getTotalNumberOfGivenHosts()
+		{
+			return array_sum($this->networkHosts) - (2 * count($this->networkHosts));
+		}
+
+		/**
+		 *
+		 * @return int
+		 */
 		public function getTotalNumberOfBlockAddresses()
 		{
 			$blockOfAddresses = 0;
@@ -66,28 +83,39 @@ namespace Model;
 				$blockOfAddresses += pow(2, (ceil(log($hosts, 2))));
 			}
 
-			return $blockOfAddresses;
+			return $blockOfAddresses - (2 * count($this->networkHosts));
 		}
 
+		/**
+		 *
+		 * @return boolean
+		 */
 		public function isNetworkRangeBigEnough()
 		{
-			if ($this->network->getNumberOfValidHosts() < $this->getTotalNumberOfHosts()) {
+			if ($this->network->getNumberOfValidHosts() < $this->getTotalNumberOfHostsInBlocks()) {
 				return FALSE;
 			}
 
 			return TRUE;
 		}
 
+		/**
+		 *
+		 * @return Network
+		 */
 		public function getNetwork()
 		{
 			return $this->network;
 		}
 
+		/**
+		 *
+		 * @return array
+		 */
 		public function getNetworkHosts()
 		{
 			return $this->networkHosts;
 		}
-
 
 		/**
 		 *
@@ -157,34 +185,26 @@ namespace Model;
 			return (int)(32 - ceil(log($number, 2)));
 		}
 
-		public function getAllResults()
+		/**
+		 *
+		 * @return float Percentage of Network address space
+		 */
+		public function getNetworkAddressSpaceUsed()
 		{
-			return $this->subnetworks;
+			$percentage = $this->getTotalNumberOfHostsInBlocks() / $this->network->getNumberOfValidHosts() * 100;
+
+			return number_format($percentage, 1, ',', ' ');
 		}
 
-		public function constructResultsTable()
+		/**
+		 *
+		 * @return float Percentage of Subnetwork address space
+		 */
+		public function getSubnettedNetworkAddressSpaceUsed()
 		{
-			$result = '<table border="1">';
-			$result .= '<tr><th>Síť</th><th>Alokovaný blok adres</th><th>Prefix</th><th>Maska</th><th>Adresa sítě</th><th>Broadcast</th></tr>';
+			$percentage = $this->getTotalNumberOfGivenHosts() / $this->getTotalNumberOfBlockAddresses() * 100;
 
-				for ($i = 0; $i < count($this->subnetworks); $i++){
-					$network = $this->subnetworks[$i];
-					$result .= '<tr>';
-
-						$result .= '<td>' .$this->networkHosts[$i]. '</td>'.
-							'<td>' .($network->getNumberOfValidHosts() + 2). '</td>'.
-						     '<td>' .$network->getSubnetMask()->getPrefix(). '</td>'.
-						     '<td>' .$network->getSubnetMask()->getAddress(). '</td>'.
-						     '<td>' .$network->getNetworkAddress()->getAddress(). '</td>'.
-						     '<td>' .$network->getBroadcastAddress()->getAddress(). '</td>';
-
-					$result .= '</tr>';
-
-				}
-
-			$result .= '</table>';
-
-			return $result;
+			return number_format($percentage, 1, ',', ' ');
 		}
 
 	}

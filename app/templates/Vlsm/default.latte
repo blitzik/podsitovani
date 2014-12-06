@@ -1,3 +1,5 @@
+{block #title}Podsíťování podle VLSM{/block}
+
 {block content}
 	{form calculatorForm}
 		<table>
@@ -8,44 +10,59 @@
 			<tr><td colspan="2">{input send}</td></tr>
 		</table>
 
-	{if $network}
-		{if !$network->isNetworkRangeBigEnough()}
-			<p class="box subnetting-failed" style="clear: left;">
-				Podsíťování selhalo! Nelze vytvořit všechny požadované sítě.
+	{if $calculator}
+		{if !$calculator->isNetworkRangeBigEnough()}
+			<p class="box subnetting-failed">
+				Podsíťování selhalo! Maska <b>{$calculator->getNetwork()->getSubnetMask()}</b> neposkytuje dostatečné
+				množství adres pro vytvoření všech podsítí.
 			</p>
 		{/if}
 	{/if}
 	{/form calculatorForm}
 
-	{if $network}
+	{if $calculator}
 	<div class="networkInfo">
 		{control networkInfo}
 	</div>
+
 	<div class="results">
-		{var $subnets = $network->getAllResults()}
+
+		<h2>Přehled</h2>
+		<div class="box">
+			<table>
+				<tr><th>Max. počet hostů</th><th>Celkový počet požadovaných hostů</th><th>Celkový počet adres v podsítích</th></tr>
+				<tr><td rowspan="3">{$calculator->getNetwork()->getNumberOfValidHosts()|number:0:',':' '}</td><td>{$calculator->getTotalNumberOfGivenHosts()|number:0:',':' '}</td>
+					<td>{$calculator->getTotalNumberOfBlockAddresses()|number:0:',':' '}</td></tr>
+				<tr><th>Celkem využito adresního prostoru</th><th>Celkem využito adresního prostoru v podsítích</th></tr>
+				<tr><td{if $calculator->getNetworkAddressSpaceUsed() > 100} class="behind"{/if}>{$calculator->getNetworkAddressSpaceUsed()}%</td>
+					<td>{$calculator->getSubnettedNetworkAddressSpaceUsed()}%</td></tr>
+			</table>
+		</div>
+
+		{var $subnets = $calculator->getSubnetworks()}
 		{if $subnets}
 		<h2>Podsítě</h2>
 		<div class="box">
 			<table>
-				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th><th>Adresa sítě</th><th>Broadcast</th><th>Rozsah adres pro hosty</th></tr>
+				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th>
+					<th>Adresa sítě</th><th>Broadcast</th><th>Rozsah adres pro hosty</th></tr>
 
 				{foreach $subnets as $subnet}
 
-					<tr{if !$network->getNetwork()->isIPFromNetwork($subnet->getBroadcastAddress())} class="behind"{/if}>
-						<td><small>(+2)</small> {$network->getNetworkHosts()[$iterator->getCounter()-1]-2}</td>
-						<td>{$subnet->getNumberOfValidHosts() + 2}</td>
+					<tr{if !$calculator->getNetwork()->isIPFromNetwork($subnet->getBroadcastAddress())} class="behind"{/if}>
+						<td>{$subnet->getHosts()-2|number:0:',':' '} <small>(+2)</small></td>
+						<td>{$subnet->getBlockOfAddresses()|number:0:',':' '}</td>
 						<td>/{$subnet->getSubnetMask()->getPrefix()}</td>
 						<td><a title="{$subnet->getSubnetMask()->getAddressInBinary()}">{$subnet->getSubnetMask()}</a></td>
 						<td><a title="{$subnet->getNetworkAddress()->getAddressInBinary()}">{$subnet->getNetworkAddress()}</a></td>
 						<td><a title="{$subnet->getBroadcastAddress()->getAddressInBinary()}">{$subnet->getBroadcastAddress()}</a></td>
-						<td>{$subnet->getFirstValidHost()} - {$subnet->getLastValidHost()}</td>
+						<td><a title="{$subnet->getFirstValidHost()->getAddressInBinary()}">{$subnet->getFirstValidHost()}</a> -
+							<a title="{$subnet->getLastValidHost()->getAddressInBinary()}">{$subnet->getLastValidHost()}</a></td>
 					</tr>
 				{/foreach}
 
 			</table>
-
 		</div>
-
 		{/if}
 	</div>
 	{/if}

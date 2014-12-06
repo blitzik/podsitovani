@@ -47,9 +47,9 @@ use \Nette\Utils\Validators;
 		{
 			return $this->prefix;
 		}
-		
+
 		/**
-		 * 
+		 *
 		 * @return IpAddress
 		 */
 		public function getWildCard()
@@ -58,7 +58,7 @@ use \Nette\Utils\Validators;
 		}
 
 		/**
-		 * 
+		 *
 		 * @param String $subnetMask
 		 * @return IpAddress
 		 */
@@ -109,7 +109,7 @@ use \Nette\Utils\Validators;
 		 */
 		private function hasPrefixFormat($cidr)
 		{
-			if (!preg_match('~^[\/]?([1-9]|1[0-9]{1}|2[0-9]{1}|3[012]{1})$~', $cidr)) {
+			if (!preg_match('~^\/?([1-9]|1[0-9]{1}|2[0-9]{1}|30)$~', $cidr)) {
 				return FALSE;
 			}
 

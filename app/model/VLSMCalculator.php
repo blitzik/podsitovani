@@ -83,7 +83,7 @@ namespace Model;
 				$blockOfAddresses += pow(2, (ceil(log($hosts, 2))));
 			}
 
-			return $blockOfAddresses - (2 * count($this->networkHosts));
+			return (int)$blockOfAddresses;
 		}
 
 		/**
@@ -202,7 +202,7 @@ namespace Model;
 		 */
 		public function getSubnettedNetworkAddressSpaceUsed()
 		{
-			$percentage = $this->getTotalNumberOfGivenHosts() / $this->getTotalNumberOfBlockAddresses() * 100;
+			$percentage = $this->getTotalNumberOfGivenHosts() / ($this->getTotalNumberOfBlockAddresses() - (2 * count($this->networkHosts))) * 100;
 
 			return number_format($percentage, 1, ',', ' ');
 		}

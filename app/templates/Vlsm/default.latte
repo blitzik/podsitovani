@@ -27,18 +27,6 @@
 
 	<div class="results">
 
-		<h2>Přehled</h2>
-		<div class="box">
-			<table>
-				<tr><th>Max. počet hostů</th><th>Celkový počet požadovaných hostů</th><th>Celkový počet adres v podsítích</th></tr>
-				<tr><td rowspan="3">{$calculator->getNetwork()->getNumberOfValidHosts()|number:0:',':' '}</td><td>{$calculator->getTotalNumberOfGivenHosts()|number:0:',':' '}</td>
-					<td>{$calculator->getTotalNumberOfBlockAddresses()|number:0:',':' '}</td></tr>
-				<tr><th>Celkem využito adresního prostoru</th><th>Celkem využito adresního prostoru v podsítích</th></tr>
-				<tr><td{if $calculator->getNetworkAddressSpaceUsed() > 100} class="behind"{/if}>{$calculator->getNetworkAddressSpaceUsed()}%</td>
-					<td>{$calculator->getSubnettedNetworkAddressSpaceUsed()}%</td></tr>
-			</table>
-		</div>
-
 		{var $subnets = $calculator->getSubnetworks()}
 		{if $subnets}
 		<h2>Podsítě</h2>

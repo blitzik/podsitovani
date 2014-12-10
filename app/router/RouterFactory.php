@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Subnetting;
 
 use Nette,
 	Nette\Application\Routers\RouteList,

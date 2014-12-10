@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Presenters;
+namespace App\Subnetting\Presenters;
 
-use Nette\Application\UI\Form;
+use Nette\Application\UI\Form,
+    App\Subnetting\Model,
+    App\Subnetting\Exceptions\LogicExceptions;
 
 	class HomepagePresenter extends BasePresenter
 	{
 		/**
 		 *
-		 * @var \Model\Network
+		 * @var \App\Subnetting\Model\Network
 		 */
 		private $network;
 
@@ -19,14 +21,14 @@ use Nette\Application\UI\Form;
 
 		protected function createComponentNetworkInfo()
 		{
-			$ni = new \Model\Components\NetworkInfo($this->network);
+			$ni = new Model\Components\NetworkInfo($this->network);
 
 			return $ni;
 		}
 
 		protected function createComponentNetworkForm()
 		{
-			$factory = new \Model\Forms\CalculatorFormFactory();
+			$factory = new Model\Factories\Forms\CalculatorFormFactory();
 
 			$form = $factory->create();
 
@@ -44,20 +46,28 @@ use Nette\Application\UI\Form;
 			$values = $form->getValues();
 
 			try {
-					$ipAddress = new \Model\IpAddress($values['ip']);
-					$subnetMask = new \Model\SubnetMask($values['mask']);
+					$ipAddress = new Model\IpAddress($values['ip']);
+					$subnetMask = new Model\SubnetMask($values['mask']);
 
-					$network = new \Model\Network($ipAddress, $subnetMask);
+					$network = new Model\Network($ipAddress, $subnetMask);
 
 					$this->network = $network;
 
-			} catch (\LogicExceptions\InvalidIpAddressException $ip) {
+			} catch (LogicExceptions\InvalidIpAddressException $ip) {
 
 				$this->flashMessage('IP adresa, kterou jste zadali, nemá platný formát.', 'errors');
 				return;
-			} catch (\LogicExceptions\InvalidSubnetMaskException $sm) {
+			} catch (LogicExceptions\InvalidSubnetMaskFormatException $sm) {
 
 				$this->flashMessage('Maska podsítě nemá platný formát.', 'errors');
+				return;
+			} catch (LogicExceptions\InvalidPrefixException $ipe) {
+
+				$this->flashMessage('Prefix nemá platný formát.', 'errors');
+				return;
+			} catch (LogicExceptions\PrefixOutOfRangeException $p) {
+
+				$this->flashMessage('Prefix lze zadat pouze v rozmezí 1 - 30', 'errors');
 				return;
 			}
 		}

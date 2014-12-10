@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Presenters;
+namespace App\Subnetting\Presenters;
 
 use Nette,
 	App\Model,

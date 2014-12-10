@@ -1,6 +1,6 @@
 <?php
 
-namespace LogicExceptions;
+namespace App\Subnetting\Exceptions\LogicExceptions;
 
 	class InvalidIpAddressException extends \LogicException
 	{
@@ -9,6 +9,18 @@ namespace LogicExceptions;
 	class InvalidSubnetMaskException extends \LogicException
 	{
 	}
+
+		class InvalidSubnetMaskFormatException extends InvalidSubnetMaskException
+		{
+		}
+
+		class InvalidPrefixException extends InvalidSubnetMaskException
+		{
+		}
+
+		class PrefixOutOfRangeException extends InvalidSubnetMaskException
+		{
+		}
 
 	class InvalidCIDRFormatException extends \LogicException
 	{

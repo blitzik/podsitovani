@@ -1,15 +1,8 @@
 <?php
 
-namespace App\Presenters;
+namespace App\Subnetting\Presenters;
 
-use Nette,
-	App\Model;
+	abstract class BasePresenter extends \Nette\Application\UI\Presenter
+	{
 
-
-/**
- * Base presenter for all application presenters.
- */
-abstract class BasePresenter extends Nette\Application\UI\Presenter
-{
-
-}
+	}

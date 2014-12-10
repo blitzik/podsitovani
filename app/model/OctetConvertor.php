@@ -1,6 +1,6 @@
 <?php
 
-namespace Model;
+namespace App\Subnetting\Model;
 
 use \Nette\Utils\Validators;
 
@@ -8,7 +8,7 @@ use \Nette\Utils\Validators;
 	{
 		/**
 		 *
-		 * @param \Model\Address $ipAddress
+		 * @param App\Subnetting\Model\Address $ipAddress
 		 * @return String Binary format of IP address
 		 */
 		public static function convertIpFromDecimalToBinary(Address $ipAddress)
@@ -23,7 +23,7 @@ use \Nette\Utils\Validators;
 
 		/**
 		 *
-		 * @param type $ipAddress
+		 * @param string $ipAddress
 		 * @return String Decimal format of IP address
 		 */
 		public static function convertIpFromBinaryToDecimal($ipAddress)
@@ -38,7 +38,7 @@ use \Nette\Utils\Validators;
 
 		/**
 		 *
-		 * @param \Model\Address $ipAddress
+		 * @param \App\Subnetting\Model\Address $ipAddress
 		 * @return array
 		 */
 		public static function separateOctets(Address $ipAddress)

@@ -1,10 +1,11 @@
 <?php
 
-namespace Model;
+namespace App\Subnetting\Model;
 
-use \Nette\Utils\Validators;
+use \Nette\Utils\Validators,
+    App\Subnetting\Exceptions\LogicExceptions;
 
-	class SubnetMask extends Address implements \IAddress
+	class SubnetMask extends Address implements IAddress
 	{
 
 		/**
@@ -21,18 +22,15 @@ use \Nette\Utils\Validators;
 
 		public function __construct($subnetMask)
 		{
-			if ($this->hasPrefixFormat($subnetMask)) {
+			if ($this->hasIPaddressValidFormat($subnetMask)) {
 
-				$this->prefix = str_replace('/', '', $subnetMask);
-				$this->address = $this->cidr2mask($this->prefix);
+				$this->prefix = (int)$this->mask2cidr($subnetMask);
+				$this->address = $subnetMask;
 
 			} else {
 
-				if (!$this->hasIPaddressValidFormat($subnetMask)) {
-					throw new \LogicExceptions\InvalidSubnetMaskException('Address ' .$subnetMask. ' is NOT a valid Subnet Mask / Prefix.');
-				}
-				$this->prefix = (int)$this->mask2cidr($subnetMask);
-				$this->address = $subnetMask;
+				$this->prefix = str_replace('/', '', $subnetMask);
+				$this->address = $this->cidr2mask($this->prefix);
 			}
 
 			$this->binaryAddress = OctetConvertor::convertIpFromDecimalToBinary($this);
@@ -74,7 +72,7 @@ use \Nette\Utils\Validators;
 		 *
 		 * @param String $mask (255.255.224.0)
 		 * @return Int
-		 * @throws \LogicExceptions\InvalidSubnetMaskException
+		 * @throws LogicExceptions\InvalidSubnetMaskFormatException
 		 */
 		private function mask2cidr($mask)
 		{
@@ -83,7 +81,7 @@ use \Nette\Utils\Validators;
 			$result = 32 - log(($long ^ $base) + 1, 2);
 
 			if ($this->isWholeNumber($result) === FALSE) {
-				throw new \LogicExceptions\InvalidSubnetMaskException('Address ' .$mask. ' is NOT a valid Subnet Mask.');
+				throw new LogicExceptions\InvalidSubnetMaskFormatException('Address ' .$mask. ' is NOT a valid Subnet Mask.');
 			}
 
 			return $result;
@@ -96,7 +94,15 @@ use \Nette\Utils\Validators;
 		 */
 		private function cidr2mask($cidr)
 		{
-			$c = pow(2, 32 - $cidr) - 1;
+			if (!$this->hasPrefixFormat($cidr)) {
+				throw new LogicExceptions\InvalidPrefixException();
+			}
+
+			if (!$this->isPrefixValid($cidr)) {
+				throw new LogicExceptions\PrefixOutOfRangeException('Prefix can be only between 1 - 30. '. $cidr. ' given!');
+			}
+
+			$c = pow(2, 32 - (int)$cidr) - 1;
 			$x = ~$c;
 
 			return long2ip($x);
@@ -108,6 +114,15 @@ use \Nette\Utils\Validators;
 		 * @return boolean
 		 */
 		private function hasPrefixFormat($cidr)
+		{
+			if (!preg_match('~^\/?\d+$~', $cidr)) {
+				return FALSE;
+			}
+
+			return TRUE;
+		}
+
+		private function isPrefixValid($cidr)
 		{
 			if (!preg_match('~^\/?([1-9]|1[0-9]{1}|2[0-9]{1}|30)$~', $cidr)) {
 				return FALSE;
@@ -127,7 +142,7 @@ use \Nette\Utils\Validators;
 				return FALSE;
 			}
 
-			return (abs($number - round($number)) < 0.0001) ? TRUE : FALSE;
+			return (abs($number - round($number)) < 0.000000001) ? TRUE : FALSE;
 		}
 
 		public function __toString()

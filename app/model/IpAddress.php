@@ -1,8 +1,8 @@
 <?php
 
-namespace Model;
+namespace App\Subnetting\Model;
 
-	class IpAddress extends Address implements \IAddress
+	class IpAddress extends Address implements IAddress
 	{
 
 		public function __construct($ipAddress)

@@ -1,6 +1,8 @@
 <?php
 
-namespace Model;
+namespace App\Subnetting\Model;
+
+use App\Subnetting\Exceptions\LogicExceptions;
 
 	class Subnetwork extends Network
 	{
@@ -58,7 +60,7 @@ namespace Model;
 		 *
 		 * @param int $hosts
 		 * @return int
-		 * @throws \LogicExceptions\InvalidNumberOfHostsException
+		 * @throws LogicExceptions\InvalidNumberOfHostsException
 		 */
 		private function checkNumberOfHosts($hosts)
 		{

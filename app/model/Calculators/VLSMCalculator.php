@@ -1,12 +1,14 @@
 <?php
 
-namespace Model;
+namespace App\Subnetting\Model\Calculators;
+
+use \App\Subnetting\Model;
 
 	class VLSMCalculator
 	{
 		/**
 		 *
-		 * @var Network
+		 * @var Model\Network
 		 */
 		private $network;
 
@@ -22,7 +24,7 @@ namespace Model;
 		 */
 		private $subnetworks = array();
 
-		public function __construct(Network $network, $networksHosts)
+		public function __construct(Model\Network $network, $networksHosts)
 		{
 			$this->network = $network;
 
@@ -40,15 +42,15 @@ namespace Model;
 		private function calculateSubnetworks()
 		{
 			$cidr = $this->calcCIDRbasedOnNumberOfHosts($this->networkHosts[0]);
-			$subnetMask = new SubnetMask($cidr);
-			$this->subnetworks[0] = new Subnetwork($this->network->getNetworkAddress(), $subnetMask, $this->networkHosts[0]);
+			$subnetMask = new Model\SubnetMask($cidr);
+			$this->subnetworks[0] = new Model\Subnetwork($this->network->getNetworkAddress(), $subnetMask, $this->networkHosts[0]);
 
 			for ($i = 1; $i < count($this->networkHosts); $i++) {
 
 				$cidr = $this->calcCIDRbasedOnNumberOfHosts($this->networkHosts[$i]);
-				$subnetMask = new SubnetMask($cidr);
-				$this->subnetworks[$i] = new Subnetwork($this->findNextNetworkAddress($this->subnetworks[$i - 1]->getBroadcastAddress()),
-												$subnetMask, $this->networkHosts[$i]);
+				$subnetMask = new Model\SubnetMask($cidr);
+				$this->subnetworks[$i] = new Model\Subnetwork($this->findNextNetworkAddress($this->subnetworks[$i - 1]->getBroadcastAddress()),
+													 $subnetMask, $this->networkHosts[$i]);
 			}
 		}
 
@@ -128,14 +130,14 @@ namespace Model;
 
 		/**
 		 *
-		 * @param \Model\IpAddress $broadcastAddress
-		 * @return \Model\IpAddress
+		 * @param Model\IpAddress $broadcastAddress
+		 * @return Model\IpAddress
 		 */
-		private function findNextNetworkAddress(IpAddress $broadcastAddress)
+		private function findNextNetworkAddress(Model\IpAddress $broadcastAddress)
 		{
 			$nextAddress = long2ip(ip2long($broadcastAddress->getAddress()) + 1);
 
-			return new IpAddress($nextAddress);
+			return new Model\IpAddress($nextAddress);
 		}
 
 		/**

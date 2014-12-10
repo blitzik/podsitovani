@@ -1,6 +1,9 @@
 <?php
 
-namespace Model;
+namespace App\Subnetting\Model\Factories\Networks;
+
+use App\Subnetting\Model,
+    App\Subnetting\Exceptions\LogicExceptions;
 
 	class NetworkFactory
 	{
@@ -8,16 +11,16 @@ namespace Model;
 		 *
 		 * @param String $ipAddress
 		 * @param String|Int $mask
-		 * @return \Model\Network
-		 * @throws \LogicExceptions\InvalidIpAddressException
-		 * @throws \LogicExceptions\InvalidSubnetMaskException
+		 * @return Model\Network
+		 * @throws LogicExceptions\InvalidIpAddressException
+		 * @throws LogicExceptions\InvalidSubnetMaskException
 		 */
 		public function createNetwork($ipAddress, $mask)
 		{
-			$ip = new IpAddress($ipAddress);
-			$subnetMask = new SubnetMask($mask);
+			$ip = new Model\IpAddress($ipAddress);
+			$subnetMask = new Model\SubnetMask($mask);
 
-			return new Network($ip, $subnetMask);
+			return new Model\Network($ip, $subnetMask);
 		}
 
 	}

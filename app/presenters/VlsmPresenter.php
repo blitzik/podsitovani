@@ -1,14 +1,19 @@
 <?php
 
-namespace App\Presenters;
+namespace App\Subnetting\Presenters;
 
-use \Nette\Application\UI\Form;
+use \Nette\Application\UI\Form,
+	\App\Subnetting\Model,
+	\App\Subnetting\Model\Factories,
+	\App\Subnetting\Model\Components,
+	\App\Subnetting\Model\Calculators,
+	\App\Subnetting\Exceptions\LogicExceptions;
 
 	class VlsmPresenter extends BasePresenter
 	{
 		/**
 		 *
-		 * @var \Model\VLSMCalculator
+		 * @var \App\Subnetting\Model\Calculators\VLSMCalculator
 		 */
 		private $vlsmCalculator;
 
@@ -19,14 +24,14 @@ use \Nette\Application\UI\Form;
 
 		protected function createComponentNetworkInfo()
 		{
-			$networkInfo = new \Model\Components\NetworkInfo($this->vlsmCalculator->getNetwork());
+			$networkInfo = new Components\NetworkInfo($this->vlsmCalculator->getNetwork());
 
 			return $networkInfo;
 		}
 
 		protected function createComponentCalculatorForm()
 		{
-			$factory = new \Model\Forms\CalculatorFormFactory();
+			$factory = new Factories\Forms\CalculatorFormFactory();
 
 			$form = $factory->create();
 
@@ -45,26 +50,30 @@ use \Nette\Application\UI\Form;
 			$mask = $values['mask'];
 
 			try {
-					$ipAddress = new \Model\IpAddress($ip);
-					$subnetMask = new \Model\SubnetMask($mask);
+					$ipAddress = new Model\IpAddress($ip);
+					$subnetMask = new Model\SubnetMask($mask);
 
-					$network = new \Model\Network($ipAddress, $subnetMask);
+					$network = new Model\Network($ipAddress, $subnetMask);
 
-					$VLSMCalculator = new \Model\VLSMCalculator($network, $values['hosts']);
+					$VLSMCalculator = new Calculators\VLSMCalculator($network, $values['hosts']);
 
 					$this->vlsmCalculator = $VLSMCalculator;
 
-			} catch (\LogicExceptions\InvalidIpAddressException $ip) {
+			} catch (LogicExceptions\InvalidIpAddressException $ip) {
 
 				$this->flashMessage('IP adresa, kterou jste zadali, nemá platný formát.', 'errors');
 				return;
-			} catch (\LogicExceptions\InvalidSubnetMaskException $sm) {
+			} catch (LogicExceptions\InvalidSubnetMaskFormatException $sm) {
 
 				$this->flashMessage('Maska podsítě nemá platný formát.', 'errors');
 				return;
-			} catch (\LogicExceptions\InvalidNumberOfHostsException $noh) {
+			} catch (LogicExceptions\InvalidPrefixException $ipe) {
 
-				$this->flashMessage('Do hostů lze uvádět jen celá čísla větší než 0.', 'errors');
+				$this->flashMessage('Prefix nemá platný formát.', 'errors');
+				return;
+			} catch (LogicExceptions\PrefixOutOfRangeException $p) {
+
+				$this->flashMessage('Prefix lze zadat pouze v rozmezí 1 - 30', 'errors');
 				return;
 			}
 

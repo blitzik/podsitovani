@@ -1,6 +1,6 @@
 <?php
 
-namespace Model;
+namespace App\Subnetting\Model;
 
 	class Network
 	{
@@ -80,7 +80,7 @@ namespace Model;
 
 		/**
 		 *
-		 * @return \Model\IpAddress
+		 * @return IpAddress
 		 */
 		protected function calcFirstValidHostAddress()
 		{
@@ -89,11 +89,13 @@ namespace Model;
 
 		/**
 		 *
-		 * @return \Model\IpAddress
+		 * @return IpAddress
 		 */
 		protected function calcLastValidHostAddress()
 		{
-			return new IpAddress(long2ip(sprintf('%u', ip2long($this->networkAddress->getAddress())) + $this->getNumberOfValidHosts()));
+			$networkAddress = sprintf('%u', ip2long($this->firstValidHost->getAddress()));
+
+			return new IpAddress(long2ip($networkAddress	+ $this->getNumberOfValidHosts() - 1));
 		}
 
 		/**
@@ -109,7 +111,7 @@ namespace Model;
 
 		/**
 		 *
-		 * @return \Model\IpAddress
+		 * @return IpAddress
 		 */
 		public function getFirstValidHost()
 		{
@@ -118,7 +120,7 @@ namespace Model;
 
 		/**
 		 *
-		 * @return \Model\IpAddress
+		 * @return IpAddress
 		 */
 		public function getLastValidHost()
 		{
@@ -127,7 +129,7 @@ namespace Model;
 
 		/**
 		 *
-		 * @return \Model\IpAddress
+		 * @return IpAddress
 		 */
 		public function getIpAddress()
 		{
@@ -136,7 +138,7 @@ namespace Model;
 
 		/**
 		 *
-		 * @return \Model\SubnetMask
+		 * @return SubnetMask
 		 */
 		public function getSubnetMask()
 		{
@@ -145,7 +147,7 @@ namespace Model;
 
 		/**
 		 *
-		 * @return \Model\IpAddress
+		 * @return IpAddress
 		 */
 		public function getNetworkAddress()
 		{
@@ -154,7 +156,7 @@ namespace Model;
 
 		/**
 		 *
-		 * @return \Model\IpAddress
+		 * @return IpAddress
 		 */
 		public function getBroadcastAddress()
 		{
@@ -167,7 +169,7 @@ namespace Model;
 		 */
 		public function isPrivate()
 		{
-			$networkFactory = new NetworkFactory;
+			$networkFactory = new Factories\Networks\NetworkFactory();
 
 			$privateNetworks = array(
 			    $networkFactory->createNetwork('10.0.0.0', '/8'),
@@ -186,7 +188,7 @@ namespace Model;
 
 		/**
 		 *
-		 * @param \Model\IpAddress $ipAddress
+		 * @param IpAddress $ipAddress
 		 * @return boolean
 		 */
 		public function isIPFromNetwork(IpAddress $ipAddress)

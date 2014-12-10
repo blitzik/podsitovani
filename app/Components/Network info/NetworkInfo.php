@@ -1,8 +1,9 @@
 <?php
 
-namespace Model\Components;
+namespace App\Subnetting\Model\Components;
 
-use Nette\Application\UI\Control;
+use Nette\Application\UI\Control,
+	App\Subnetting\Model;
 
 	class NetworkInfo extends Control
 	{
@@ -12,7 +13,7 @@ use Nette\Application\UI\Control;
 		 */
 		private $network;
 
-		public function __construct(\Model\Network $network)
+		public function __construct(Model\Network $network)
 		{
 			$this->network = $network;
 		}

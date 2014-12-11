@@ -75,6 +75,10 @@ use \Nette\Application\UI\Form,
 
 				$this->flashMessage('Prefix lze zadat pouze v rozmezí 1 - 30', 'errors');
 				return;
+			} catch (LogicExceptions\InvalidNumberOfHostsException $inoh) {
+
+				$this->flashMessage('Neplatný formát zadaných hostů', 'errors');
+				return;
 			}
 
 		}

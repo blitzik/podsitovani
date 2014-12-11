@@ -2,7 +2,8 @@
 
 namespace App\Subnetting\Model\Calculators;
 
-use \App\Subnetting\Model;
+use App\Subnetting\Model,
+	App\Subnetting\Exceptions\LogicExceptions;
 
 	class VLSMCalculator
 	{
@@ -30,7 +31,7 @@ use \App\Subnetting\Model;
 
 			$hosts = $this->separateNumberOfHosts($networksHosts);
 			if (!$this->areHostsValid($hosts)) {
-				throw new \LogicExceptions\InvalidNumberOfHostsException('Only whole numbers bigger than 0 are allowed.');
+				throw new LogicExceptions\InvalidNumberOfHostsException('Only whole numbers bigger than 0 are allowed.');
 			}
 
 			$this->networkHosts = $this->prepareValidNumberOfHosts($hosts);

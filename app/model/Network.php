@@ -72,10 +72,10 @@ namespace App\Subnetting\Model;
 		 */
 		protected function findBroadcastAddress()
 		{
-			$networkAddress = ip2long($this->networkAddress->getAddress());
-			$mask = ip2long($this->subnetMask->getAddress());
+			$wildCard = ip2long($this->subnetMask->getWildCard());
+			$network = ip2long($this->networkAddress);
 
-			return new IpAddress(long2ip($networkAddress + (~$mask)));
+			return new IpAddress(long2ip(($network | $wildCard)));
 		}
 
 		/**
@@ -84,7 +84,7 @@ namespace App\Subnetting\Model;
 		 */
 		protected function calcFirstValidHostAddress()
 		{
-			return new IpAddress(long2ip(sprintf('%u', ip2long($this->networkAddress->getAddress())) + 1));
+			return new IpAddress(long2ip(ip2long($this->networkAddress->getAddress()) + 1));
 		}
 
 		/**
@@ -93,9 +93,7 @@ namespace App\Subnetting\Model;
 		 */
 		protected function calcLastValidHostAddress()
 		{
-			$networkAddress = sprintf('%u', ip2long($this->firstValidHost->getAddress()));
-
-			return new IpAddress(long2ip($networkAddress	+ $this->getNumberOfValidHosts() - 1));
+			return new IpAddress(long2ip(ip2long($this->broadcastAddress) - 1));
 		}
 
 		/**
@@ -104,9 +102,7 @@ namespace App\Subnetting\Model;
 		 */
 		public function getNumberOfValidHosts()
 		{
-			$invertedMask = ip2long($this->subnetMask->getWildCard()->getAddress());
-
-			return (int)$invertedMask - 1;
+			return $this->subnetMask->getNumberOfHostsProvidedByMask() - 2;
 		}
 
 		/**

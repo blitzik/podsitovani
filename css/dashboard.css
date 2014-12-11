@@ -95,6 +95,7 @@ body{
 		float: left;
 		overflow: auto;
 		margin: 20px 0;
+		clear: both;
 }
 
 .box table {
@@ -111,10 +112,21 @@ body{
 			background-color: #E5E5E5;
 }
 
+.box table tr:hover{
+			background-color: #DEF0FF;
+}
+
 .subnetting-failed{
 				width: 400px;
 				background-color: #FFADC0;
 				color: #7D2A3E;
+}
+
+.notice{
+		width: 470px;
+		background-color: #FFFBE3;
+		border-left: 8px solid #E8E0B3;
+		color: #595228;
 }
 
 .networkInfo .box{

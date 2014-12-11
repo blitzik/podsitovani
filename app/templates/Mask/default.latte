@@ -1,0 +1,25 @@
+{block title}Maska podsítě{/block}
+
+{block content}
+
+	<h2>Počet dostupných adres podle masky podsítě</h2>
+
+	<p class="box notice">Maska <b>255.255.255.255</b> nespecifikuje podsíť, ale 1 konkrétního hosta.</p>
+
+	<p class="box notice">Maska <b>255.255.255.254</b> nedovoluje vytvořit žádný prostor pro hosty.
+					  Tuto masku je ale možné využít pro speciální point-to-point spojení.</p>
+
+	<div class="box">
+	<table>
+		<tr><th>Prefix</th><th>Maska</th><th>Počet adres</th><th>Počet dostupných hostů</th></tr>
+
+		{foreach $masks as $mask}
+			<tr><td>/{$mask->getPrefix()}</td>
+				<td><a title="{$mask->getAddressInBinary()}">{$mask->getAddress()}</a></td>
+				<td>{$mask->getNumberOfHostsProvidedByMask()|number:0:',':' '}</td>
+				<td>{$mask->getNumberOfHostsProvidedByMask() - 2|number:0:',':' '}</td></tr>
+		{/foreach}
+
+	</table>
+	</div>
+{/block}

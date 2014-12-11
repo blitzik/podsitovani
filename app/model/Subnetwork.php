@@ -37,27 +37,6 @@ use App\Subnetting\Exceptions\LogicExceptions;
 
 		/**
 		 *
-		 * @return IpAddress
-		 */
-		protected function findBroadcastAddress()
-		{
-			$networkAddress = ip2long($this->getNetworkAddress()->getAddress());
-			$broadcast = long2ip($networkAddress + $this->blockOfAddresses - 1);
-
-			return new IpAddress($broadcast);
-		}
-
-		/**
-		 *
-		 * @return IpAddress
-		 */
-		protected function calcLastValidHostAddress()
-		{
-			return new IpAddress(long2ip(ip2long($this->getBroadcastAddress()->getAddress()) - 1));
-		}
-
-		/**
-		 *
 		 * @param int $hosts
 		 * @return int
 		 * @throws LogicExceptions\InvalidNumberOfHostsException

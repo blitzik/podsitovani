@@ -55,6 +55,13 @@ use \Nette\Utils\Validators,
 			return $this->wildCard;
 		}
 
+		public function getNumberOfHostsProvidedByMask()
+		{
+			$invertedMask = (int)sprintf('%u', ip2long($this->wildCard->getAddress())) + 1;
+
+			return $invertedMask;
+		}
+
 		/**
 		 *
 		 * @param String $subnetMask
@@ -122,6 +129,11 @@ use \Nette\Utils\Validators,
 			return TRUE;
 		}
 
+		/**
+		 *
+		 * @param string $cidr
+		 * @return boolean
+		 */
 		private function isPrefixValid($cidr)
 		{
 			if (!preg_match('~^\/?([1-9]|1[0-9]{1}|2[0-9]{1}|30)$~', $cidr)) {

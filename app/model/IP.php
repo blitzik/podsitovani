@@ -9,7 +9,7 @@ namespace App\Subnetting\Model;
 		/**
 		 *
 		 * @param \App\Subnetting\Model\Address $address
-		 * @return string A proper address representation
+		 * @return float A proper address representation
 		 */
 		public static function ip2long($address)
 		{
@@ -18,7 +18,7 @@ namespace App\Subnetting\Model;
 
 		/**
 		 *
-		 * @param int $proper_address A proper address representation
+		 * @param int|float $proper_address A proper address representation
 		 * @return string Returns the Internet IP address as a string
 		 * @throws \InvalidArgumentException
 		 */

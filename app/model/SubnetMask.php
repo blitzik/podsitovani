@@ -75,11 +75,17 @@ use \Nette\Utils\Validators,
 		/**
 		 *
 		 * @param String $mask (255.255.224.0)
-		 * @return Int
+		 * @return int
 		 * @throws LogicExceptions\InvalidSubnetMaskFormatException
+		 * @throws LogicExceptions\SpecialSubnetMaskException
 		 */
 		private function mask2cidr(SubnetMask $mask)
 		{
+			if ($mask->getAddress() == '255.255.255.255' OR
+			    $mask->getAddress() == '255.255.255.254') {
+				throw new LogicExceptions\SpecialSubnetMaskException();
+			}
+
 			$long = IP::ip2long($mask);
 			$base = IP::ip2long('255.255.255.255');
 			$result = 32 - log(($long ^ $base) + 1, 2);
@@ -94,7 +100,9 @@ use \Nette\Utils\Validators,
 		/**
 		 *
 		 * @param int $cidr
-		 * @return String Subnet mask
+		 * @return string IP address as a string
+		 * @throws LogicExceptions\InvalidPrefixException
+		 * @throws LogicExceptions\PrefixOutOfRangeException
 		 */
 		private function cidr2mask($cidr)
 		{

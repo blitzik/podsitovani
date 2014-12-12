@@ -14,6 +14,10 @@ namespace App\Subnetting\Exceptions\LogicExceptions;
 		{
 		}
 
+		class SpecialSubnetMaskException extends InvalidSubnetMaskException
+		{
+		}
+
 		class InvalidPrefixException extends InvalidSubnetMaskException
 		{
 		}

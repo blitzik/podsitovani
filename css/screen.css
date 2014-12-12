@@ -37,6 +37,14 @@ div.flash {
                color: #A8433A;
 }
 
+.flash.errors a{
+			color: #A8433A;
+}
+
+.flash.errors a:hover{
+			text-decoration: none;
+}
+
 a[href^="#error:"] {
 	background: red;
 	color: white;

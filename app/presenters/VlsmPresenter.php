@@ -79,6 +79,12 @@ use \Nette\Application\UI\Form,
 
 				$this->flashMessage('Neplatný formát zadaných hostů', 'errors');
 				return;
+			} catch (LogicExceptions\SpecialSubnetMaskException $sm) {
+
+				$link = $this->link('Mask:default');
+
+				$this->flashMessage('Tuto masku <a href="' .$link. '">nelze využít</a> pro podsíťování.', 'errors');
+				return;
 			}
 
 		}

@@ -69,6 +69,12 @@ use Nette\Application\UI\Form,
 
 				$this->flashMessage('Prefix lze zadat pouze v rozmezí 1 - 30', 'errors');
 				return;
+			} catch (LogicExceptions\SpecialSubnetMaskException $sm) {
+
+				$link = $this->link('Mask:default');
+
+				$this->flashMessage('Tuto masku <a href="' .$link. '">nelze využít</a> pro podsíťování.', 'errors');
+				return;
 			}
 		}
 

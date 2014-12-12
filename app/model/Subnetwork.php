@@ -37,6 +37,19 @@ use App\Subnetting\Exceptions\LogicExceptions;
 
 		/**
 		 *
+		 * @return IpAddress
+		 */
+		protected function findBroadcastAddress()
+		{
+			$hosts = $this->getSubnetMask()->getNumberOfHostsProvidedByMask() - 1;
+
+			$network = IP::ip2long($this->getNetworkAddress());
+
+			return new IpAddress(IP::long2ip($network + $hosts));
+		}
+
+		/**
+		 *
 		 * @param int $hosts
 		 * @return int
 		 * @throws LogicExceptions\InvalidNumberOfHostsException

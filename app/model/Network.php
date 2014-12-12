@@ -60,10 +60,7 @@ namespace App\Subnetting\Model;
 		 */
 		protected function findNetworkAddress()
 		{
-			$ip = ip2long($this->ipAddress->getAddress());
-			$sm = ip2long($this->subnetMask->getAddress());
-
-			return new IpAddress(long2ip($ip & $sm));
+			return new IpAddress(IP::logic_and($this->ipAddress, $this->subnetMask));
 		}
 
 		/**
@@ -72,10 +69,7 @@ namespace App\Subnetting\Model;
 		 */
 		protected function findBroadcastAddress()
 		{
-			$wildCard = ip2long($this->subnetMask->getWildCard());
-			$network = ip2long($this->networkAddress);
-
-			return new IpAddress(long2ip(($network | $wildCard)));
+			return new IpAddress(IP::logic_or($this->subnetMask->getWildCard(), $this->networkAddress));
 		}
 
 		/**
@@ -84,7 +78,7 @@ namespace App\Subnetting\Model;
 		 */
 		protected function calcFirstValidHostAddress()
 		{
-			return new IpAddress(long2ip(ip2long($this->networkAddress->getAddress()) + 1));
+			return new IpAddress(IP::long2ip(IP::ip2long($this->networkAddress) + 1));
 		}
 
 		/**
@@ -93,7 +87,7 @@ namespace App\Subnetting\Model;
 		 */
 		protected function calcLastValidHostAddress()
 		{
-			return new IpAddress(long2ip(ip2long($this->broadcastAddress) - 1));
+			return new IpAddress(IP::long2ip(IP::ip2long($this->broadcastAddress) - 1));
 		}
 
 		/**
@@ -187,12 +181,12 @@ namespace App\Subnetting\Model;
 		 * @param IpAddress $ipAddress
 		 * @return boolean
 		 */
-		public function isIPFromNetwork(IpAddress $ipAddress)
+		public function isIPFromNetwork(Address $ipAddress)
 		{
-			$firstDec = sprintf('%u', ip2long($this->networkAddress));
-			$lastDec = sprintf('%u', ip2long($this->broadcastAddress));
+			$firstDec = IP::ip2long($this->networkAddress);
+			$lastDec = IP::ip2long($this->broadcastAddress);
 
-			$ipDec = sprintf('%u', ip2long($ipAddress->getAddress()));
+			$ipDec = IP::ip2long($ipAddress);
 
 			return (($ipDec >= $firstDec AND $ipDec <= $lastDec) ? TRUE : FALSE);
 		}

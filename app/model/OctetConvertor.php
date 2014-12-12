@@ -4,8 +4,10 @@ namespace App\Subnetting\Model;
 
 use \Nette\Utils\Validators;
 
-	class OctetConvertor
+	final class OctetConvertor
 	{
+		private function __construct(){}
+
 		/**
 		 *
 		 * @param App\Subnetting\Model\Address $ipAddress

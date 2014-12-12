@@ -24,8 +24,8 @@ use \Nette\Utils\Validators,
 		{
 			if ($this->hasIPaddressValidFormat($subnetMask)) {
 
-				$this->prefix = (int)$this->mask2cidr($subnetMask);
 				$this->address = $subnetMask;
+				$this->prefix = (int)$this->mask2cidr($this);
 
 			} else {
 
@@ -34,7 +34,7 @@ use \Nette\Utils\Validators,
 			}
 
 			$this->binaryAddress = OctetConvertor::convertIpFromDecimalToBinary($this);
-			$this->wildCard = $this->createWildCard($this->address);
+			$this->wildCard = $this->createWildCard($this);
 		}
 
 		/**
@@ -57,7 +57,7 @@ use \Nette\Utils\Validators,
 
 		public function getNumberOfHostsProvidedByMask()
 		{
-			$invertedMask = (int)sprintf('%u', ip2long($this->wildCard->getAddress())) + 1;
+			$invertedMask = IP::ip2long($this->wildCard) + 1;
 
 			return $invertedMask;
 		}
@@ -67,12 +67,9 @@ use \Nette\Utils\Validators,
 		 * @param String $subnetMask
 		 * @return IpAddress
 		 */
-		private function createWildCard($subnetMask)
+		private function createWildCard(SubnetMask $mask)
 		{
-			$mask = ip2long($subnetMask);
-			$wildCard = ~$mask;
-
-			return new IpAddress(long2ip($wildCard));
+			return new IpAddress(IP::logic_not($mask));
 		}
 
 		/**
@@ -81,10 +78,10 @@ use \Nette\Utils\Validators,
 		 * @return Int
 		 * @throws LogicExceptions\InvalidSubnetMaskFormatException
 		 */
-		private function mask2cidr($mask)
+		private function mask2cidr(SubnetMask $mask)
 		{
-			$long = ip2long($mask);
-			$base = ip2long('255.255.255.255');
+			$long = IP::ip2long($mask);
+			$base = IP::ip2long('255.255.255.255');
 			$result = 32 - log(($long ^ $base) + 1, 2);
 
 			if ($this->isWholeNumber($result) === FALSE) {

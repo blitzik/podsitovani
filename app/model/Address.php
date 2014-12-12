@@ -2,6 +2,8 @@
 
 namespace App\Subnetting\Model;
 
+use App\Subnetting\Exceptions\LogicExceptions;
+
 	abstract class Address
 	{
 		/**
@@ -19,7 +21,7 @@ namespace App\Subnetting\Model;
 		public function __construct($address)
 		{
 			if (!$this->hasIPaddressValidFormat($address)) {
-				throw new \LogicExceptions\InvalidIpAddressException('Address ' .$address. ' is NOT a valid IPv4.');
+				throw new LogicExceptions\InvalidIpAddressException('Address ' .$address. ' is NOT a valid IPv4.');
 			}
 
 			$this->address = $address;
@@ -39,7 +41,7 @@ namespace App\Subnetting\Model;
 
 		/**
 		 *
-		 * @return IpAddress
+		 * @return string IP address
 		 */
 		public function getAddress()
 		{

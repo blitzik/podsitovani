@@ -3,7 +3,8 @@
 namespace App\Subnetting\Model;
 
 use \Nette\Utils\Validators,
-    App\Subnetting\Exceptions\LogicExceptions;
+	App\Subnetting\Model\Utils\IP,
+	App\Subnetting\Exceptions\LogicExceptions;
 
 	class SubnetMask extends Address implements IAddress
 	{
@@ -33,7 +34,7 @@ use \Nette\Utils\Validators,
 				$this->address = $this->cidr2mask($this->prefix);
 			}
 
-			$this->binaryAddress = OctetConvertor::convertIpFromDecimalToBinary($this);
+			$this->binaryAddress = Utils\OctetConvertor::convertIpFromDecimalToBinary($this);
 			$this->wildCard = $this->createWildCard($this);
 		}
 
@@ -55,6 +56,10 @@ use \Nette\Utils\Validators,
 			return $this->wildCard;
 		}
 
+		/**
+		 *
+		 * @return int
+		 */
 		public function getNumberOfHostsProvidedByMask()
 		{
 			$invertedMask = IP::ip2long($this->wildCard) + 1;

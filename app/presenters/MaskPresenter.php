@@ -17,7 +17,7 @@ use App\Subnetting\Model;
 			for ($i = 30; $i >= 1; $i--) {
 				$this->subnetMasks[] = new Model\SubnetMask($i);
 			}
-
+			
 		}
 
 		public function renderDefault()

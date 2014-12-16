@@ -2,7 +2,8 @@
 
 namespace App\Subnetting\Model;
 
-use App\Subnetting\Exceptions\LogicExceptions;
+use App\Subnetting\Model\Utils\IP,
+	App\Subnetting\Exceptions\LogicExceptions;
 
 	class Subnetwork extends Network
 	{

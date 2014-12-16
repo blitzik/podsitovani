@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Subnetting\Model;
+namespace App\Subnetting\Model\Utils;
 
-use \Nette\Utils\Validators;
+use \Nette\Utils\Validators,
+    App\Subnetting\Model\Address;
 
 	final class OctetConvertor
 	{

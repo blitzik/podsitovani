@@ -30,6 +30,10 @@ namespace App\Subnetting\Exceptions\LogicExceptions;
 	{
 	}
 
+	class CIDRSubnetMaskRangeException extends \LogicException
+	{
+	}
+
 	class InvalidNumberOfHostsException extends \LogicException
 	{
 	}

@@ -1,6 +1,8 @@
 {block content}
 
 	{form networkForm}
+		<p class="errors" n:foreach="$form->errors as $error">{$error}</p>
+
 		<table>
 			<tr><th>{label ip /}</th><th>{label mask /}</th></tr>
 			<tr><td>{input ip}</td><td>{input mask}</td></tr>

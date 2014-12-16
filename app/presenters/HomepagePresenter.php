@@ -14,6 +14,8 @@ use Nette\Application\UI\Form,
 		 */
 		private $network;
 
+
+
 		public function renderDefault()
 		{
 			$this->template->network = $this->network;
@@ -28,13 +30,11 @@ use Nette\Application\UI\Form,
 
 		protected function createComponentNetworkForm()
 		{
-			$factory = new Model\Factories\Forms\CalculatorFormFactory();
-
-			$form = $factory->create();
-
-			unset($form['hosts']);
+			$form = $this->calculatorFormFactory->create(30);
 
 			$form['send']->caption = 'Zobrazit';
+
+			unset($form['mask2'], $form['hosts']);
 
 			$form->onSuccess[] = $this->processSubmit;
 
@@ -46,18 +46,14 @@ use Nette\Application\UI\Form,
 			$values = $form->getValues();
 
 			try {
-					$ipAddress = new Model\IpAddress($values['ip']);
-					$subnetMask = new Model\SubnetMask($values['mask']);
-
-					$network = new Model\Network($ipAddress, $subnetMask);
-
-					$this->network = $network;
+				$this->network = new Model\Network(new Model\IpAddress($values['ip']),
+											new Model\SubnetMask($values['mask']));
 
 			} catch (LogicExceptions\InvalidIpAddressException $ip) {
 
-				$this->flashMessage('IP adresa, kterou jste zadali, nemá platný formát.', 'errors');
+				$form->addError('IP adresa nemá platný formát.');
 				return;
-			} catch (LogicExceptions\InvalidSubnetMaskFormatException $sm) {
+			}/* catch (LogicExceptions\InvalidSubnetMaskFormatException $sm) {
 
 				$this->flashMessage('Maska podsítě nemá platný formát.', 'errors');
 				return;
@@ -75,7 +71,7 @@ use Nette\Application\UI\Form,
 
 				$this->flashMessage('Tuto masku <a href="' .$link. '">nelze využít</a> pro podsíťování.', 'errors');
 				return;
-			}
+			}*/
 		}
 
 	}

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Subnetting\Model;
+namespace App\Subnetting\Model\Utils;
+
+use App\Subnetting\Model\Address;
 
 	final class IP
 	{

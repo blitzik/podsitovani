@@ -1,45 +1,31 @@
-{block #title}Podsíťování podle VLSM{/block}
+{block title}Podsíťování podle CIDR{/block}
 
 {block content}
 	{form calculatorForm}
-		<p class="errors" n:foreach="$form->errors as $error">{$error}</p>
+	<p class="errors" n:foreach="$form->errors as $error">{$error}</p>
 
 		<table>
 			<tr><th>{label ip /}</th><th>{label mask /}</th></tr>
 			<tr><td>{input ip}</td><td>{input mask}</td></tr>
-			<tr><td colspan="2">{label hosts /} <small>(Př: 65, 24, 120)</small></td></tr>
-			<tr><td colspan="2">{input hosts}</td></tr>
+			<tr><td>{label mask2 /}</td><td>{snippet secondMask}{input mask2}{/snippet}</td></tr>
 			<tr><td colspan="2">{input send}</td></tr>
 		</table>
-
-	{if $calculator}
-		{if !$calculator->isNetworkRangeBigEnough()}
-			<p class="box subnetting-failed">
-				Podsíťování selhalo! Maska <b>{$calculator->getNetwork()->getSubnetMask()}</b> neposkytuje dostatečné
-				množství adres pro vytvoření všech podsítí.
-			</p>
-		{/if}
-	{/if}
 	{/form calculatorForm}
-
-	{if $calculator}
-	<div class="networkInfo">
-		{control networkInfo}
-	</div>
 
 	<div class="results">
 
-		{var $subnets = $calculator->getSubnetworks()}
-		{if $subnets}
+		{if $calculator}
 		<h2>Podsítě</h2>
 		<div class="box">
+
 			<table>
 				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th>
 					<th>Adresa sítě</th><th>Broadcast</th><th>Rozsah adres pro hosty</th></tr>
 
+				{var $subnets = $calculator->calculateSubnets()}
 				{foreach $subnets as $subnet}
 
-					<tr{if !$calculator->getNetwork()->isIPFromNetwork($subnet->getBroadcastAddress())} class="behind"{/if}>
+					<tr>
 						<td>{$subnet->getHosts()-2|number:0:',':' '} <small>(+2)</small></td>
 						<td>{$subnet->getBlockOfAddresses()|number:0:',':' '}</td>
 						<td>/{$subnet->getSubnetMask()->getPrefix()}</td>
@@ -52,10 +38,27 @@
 				{/foreach}
 
 			</table>
+
 		</div>
 		{/if}
 	</div>
-	{/if}
 
+<script>
+	{include #jsCallback, input => mask, link => secondMaskChange}
+</script>
 
 {/block}
+
+{define #jsCallback}
+
+$('#{$control["calculatorForm"][$input]->htmlId}').on('change', function() {
+    $.nette.ajax({
+        type: 'GET',
+        url: '{link {$link}!}',
+        data: {
+            'value': $(this).val(),
+        }
+    });
+});
+
+{/define}

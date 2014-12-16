@@ -2,6 +2,8 @@
 
 namespace App\Subnetting\Model;
 
+use App\Subnetting\Model\Utils\IP;
+
 	class Network
 	{
 

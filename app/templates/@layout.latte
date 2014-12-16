@@ -18,31 +18,28 @@
 
 <body>
 	<script> document.documentElement.className+=' js' </script>
+	{block scripts}
+	<script src="{$basePath}/js/jquery.js"></script>
+	<script src="{$basePath}/js/netteForms.js"></script>
+	<script src="{$basePath}/js/nette.ajax.js"></script>
+	<script src="{$basePath}/js/main.js"></script>
+	{/block}
 
 	<div id="container">
 		<div id="wrapper">
 			<h1><a href="{$basePath}">IP kalkulátor</a></h1>
 			<ul class="menu">
-				<li><a href="{$basePath}"{ifCurrent Homepage:default} class="selected"{/ifCurrent}>Info o síti</a></li>
-				<!--<li><a href="">CIDR</a></li>-->
+				<li><a href="{$basePath}"{ifCurrent Homepage:default} class="selected"{/ifCurrent}>Informace o síti</a></li>
+				<!--<li><a href="{link Cidr:default}"{ifCurrent Cidr:default} class="selected"{/ifCurrent}>CIDR</a></li>-->
 				<li><a href="{link Vlsm:default}"{ifCurrent Vlsm:default} class="selected"{/ifCurrent}>VLSM</a></li>
+				<li><a href="{link Mask:default}"{ifCurrent Mask:default} class="selected"{/ifCurrent}>Počet hostů dle masky</a></li>
 			</ul>
 		<div id="content">
 			<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{!$flash->message}</div>
 			{include content}
 		</div>
-
-		<ul class="nav">
-			<!--<li><a href="">O Aplikaci</a></li>-->
-			<li><a href="{link Mask:default}">Počet dostupných adres podle masky</a></li>
-		</ul>
 		</div>
 	</div>
 
-	{block scripts}
-	<script src="{$basePath}/js/jquery.js"></script>
-	<script src="{$basePath}/js/netteForms.js"></script>
-	<script src="{$basePath}/js/main.js"></script>
-	{/block}
 </body>
 </html>

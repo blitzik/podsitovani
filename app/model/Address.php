@@ -26,7 +26,7 @@ use App\Subnetting\Exceptions\LogicExceptions;
 
 			$this->address = $address;
 
-			$this->binaryAddress = OctetConvertor::convertIpFromDecimalToBinary($this);
+			$this->binaryAddress = Utils\OctetConvertor::convertIpFromDecimalToBinary($this);
 
 		}
 

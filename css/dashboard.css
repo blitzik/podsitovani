@@ -4,11 +4,10 @@ body{
 }
 
 #container{
-			position: relative;
-			right: 50%;
-			margin: 0 auto;
-			border: 0px solid green;
-			float: right;
+		float: right;
+		position: relative;
+		right: 50%;
+		border: 0px solid green;
 }
 
 #wrapper {
@@ -70,6 +69,7 @@ body{
 
 .menu li a.selected{
 		background-color: #6D778A;
+		padding-bottom: 11px;
 }
 
 #calcForm{
@@ -156,11 +156,24 @@ h3{
 	color: #000;
 }
 
-form input{
+form input,
+form select{
 			padding: 8px;
 			font-size: 115%;
 }
 
 label{
 		color: #D1D6E7;
+}
+
+.ipaddress{
+		width: 135px;
+}
+
+.subnetmask{
+			width: 210px;
+}
+
+.hosts{
+		width: 350px;
 }

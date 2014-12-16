@@ -5,7 +5,7 @@ namespace App\Subnetting\Model\Calculators;
 use App\Subnetting\Model,
 	App\Subnetting\Exceptions\LogicExceptions;
 
-	class VLSMCalculator
+	class VLSMCalculator extends Calculator
 	{
 		/**
 		 *
@@ -42,17 +42,27 @@ use App\Subnetting\Model,
 
 		private function calculateSubnetworks()
 		{
-			$cidr = $this->calcCIDRbasedOnNumberOfHosts($this->networkHosts[0]);
-			$subnetMask = new Model\SubnetMask($cidr);
-			$this->subnetworks[0] = new Model\Subnetwork($this->network->getNetworkAddress(), $subnetMask, $this->networkHosts[0]);
+			$this->subnetworks[0] = $this->calcNextSubnet($this->network->getNetworkAddress(), $this->networkHosts[0]);
 
 			for ($i = 1; $i < count($this->networkHosts); $i++) {
 
-				$cidr = $this->calcCIDRbasedOnNumberOfHosts($this->networkHosts[$i]);
-				$subnetMask = new Model\SubnetMask($cidr);
-				$this->subnetworks[$i] = new Model\Subnetwork($this->findNextNetworkAddress($this->subnetworks[$i - 1]->getBroadcastAddress()),
-													 $subnetMask, $this->networkHosts[$i]);
+				$this->subnetworks[$i] = $this->calcNextSubnet($this->findNextAddress($this->subnetworks[$i - 1]->getBroadcastAddress()),
+														$this->networkHosts[$i]);
 			}
+		}
+
+		/**
+		 *
+		 * @param \App\Subnetting\Model\IpAddress $ipAddress
+		 * @param int $hosts
+		 * @return \App\Subnetting\Model\Subnetwork
+		 */
+		private function calcNextSubnet(\App\Subnetting\Model\IpAddress $ipAddress, $hosts)
+		{
+			$cidr = $this->calcCIDRbasedOnNumberOfHosts($hosts);
+			$subnetMask = new Model\SubnetMask($cidr);
+
+			return  new Model\Subnetwork($ipAddress, $subnetMask, $hosts);
 		}
 
 		/**
@@ -127,18 +137,6 @@ use App\Subnetting\Model,
 		public function getSubnetworks()
 		{
 			return $this->subnetworks;
-		}
-
-		/**
-		 *
-		 * @param Model\IpAddress $broadcastAddress
-		 * @return Model\IpAddress
-		 */
-		private function findNextNetworkAddress(Model\IpAddress $broadcastAddress)
-		{
-			$nextAddress = long2ip(ip2long($broadcastAddress->getAddress()) + 1);
-
-			return new Model\IpAddress($nextAddress);
 		}
 
 		/**

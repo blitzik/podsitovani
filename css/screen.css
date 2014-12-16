@@ -28,20 +28,23 @@ div.flash {
 	margin: 0 0 1em 0;
 }
 
-.flash.errors{
-			background-image: url('../images/error.png');
-			background-repeat: no-repeat;
-               background-position: 1em 50%;
-               background-color: #EACBCB;
-               border: 1px solid #DCA7A7;
-               color: #A8433A;
+.errors{
+	padding: 1em;
+	padding-left: 3.5em;
+	margin: 0 0 1em 0;
+	background-image: url('../images/error.png');
+	background-repeat: no-repeat;
+	background-position: 1em 50%;
+	background-color: #EACBCB;
+	border: 1px solid #DCA7A7;
+	color: #A8433A;
 }
 
-.flash.errors a{
+.errors a{
 			color: #A8433A;
 }
 
-.flash.errors a:hover{
+.errors a:hover{
 			text-decoration: none;
 }
 

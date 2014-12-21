@@ -8,22 +8,25 @@
 			<tr><th>{label ip /}</th><th>{label mask /}</th></tr>
 			<tr><td>{input ip}</td><td>{input mask}</td></tr>
 			<tr><td>{label mask2 /}</td><td>{snippet secondMask}{input mask2}{/snippet}</td></tr>
-			<tr><td colspan="2">{input send}</td></tr>
+			<tr><td>{input send} {input reset}</td></tr>
 		</table>
 	{/form calculatorForm}
 
+	{if $calculator}
+	<div class="networkInfo">
+		{control networkInfo}
+	</div>
+
 	<div class="results">
 
-		{if $calculator}
 		<h2>Podsítě</h2>
 		<div class="box">
-
+			{control paginator}
 			<table>
 				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th>
 					<th>Adresa sítě</th><th>Broadcast</th><th>Rozsah adres pro hosty</th></tr>
 
-				{var $subnets = $calculator->calculateSubnets()}
-				{foreach $subnets as $subnet}
+				{foreach $results as $subnet}
 
 					<tr>
 						<td>{$subnet->getHosts()-2|number:0:',':' '} <small>(+2)</small></td>
@@ -40,11 +43,13 @@
 			</table>
 
 		</div>
-		{/if}
 	</div>
-
+	{/if}
+	
 <script>
-	{include #jsCallback, input => mask, link => secondMaskChange}
+	$(function () {
+		{include #jsCallback, input => mask, link => secondMaskChange}
+	});
 </script>
 
 {/block}

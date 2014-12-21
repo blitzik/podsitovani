@@ -10,6 +10,13 @@ use App\Subnetting\Model,
 
 		/**
 		 *
+		 * @param int $offset
+		 * @return int
+		 */
+		abstract protected function calcBlocksFromBeginningToOffset($offset);
+
+		/**
+		 *
 		 * @param Model\IpAddress $address
 		 * @return Model\IpAddress
 		 */

@@ -19,34 +19,44 @@ h1 {
 	display: none;
 }
 
-div.flash {
+div.flash,
+.errors{
 	color: black;
 	background: #FFF9D7;
 	border: 1px solid #E2C822;
 	padding: 1em;
-	padding-left: 3.5em;
-	margin: 0 0 1em 0;
+	margin: 0;
+	margin-bottom: 1em;
 }
 
+.flash.success,
+.flash.error,
 .errors{
-	padding: 1em;
-	padding-left: 3.5em;
-	margin: 0 0 1em 0;
-	background-image: url('../images/error.png');
-	background-repeat: no-repeat;
-	background-position: 1em 50%;
-	background-color: #EACBCB;
-	border: 1px solid #DCA7A7;
-	color: #A8433A;
+                background-image: url('../images/success.png');
+                background-repeat: no-repeat;
+                background-position: 1em 50%;
+                padding-left: 3.5em;
+                background-color: #dff0d8;
+                border: 1px solid #CAE0C1;
+                color: #468847;
 }
 
-.errors a{
-			color: #A8433A;
+.flash.error,
+.errors{
+              background-image: url('../images/error.png');
+              background-color: #EACBCB;
+              border: 1px solid #DCA7A7;
+              color: #A8433A;
 }
 
-.errors a:hover{
+.error a{
+		color: #A8433A;
+}
+
+.error a:hover{
 			text-decoration: none;
 }
+
 
 a[href^="#error:"] {
 	background: red;

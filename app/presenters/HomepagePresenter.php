@@ -6,7 +6,7 @@ use Nette\Application\UI\Form,
     App\Subnetting\Model,
     App\Subnetting\Exceptions\LogicExceptions;
 
-	class HomepagePresenter extends BasePresenter
+	class HomepagePresenter extends CalculatorPresenter
 	{
 		/**
 		 *

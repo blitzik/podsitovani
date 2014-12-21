@@ -1,5 +1,5 @@
 body{
-      background-color: #484F5C;
+      background-color: #203047;
 	 color: #D1D6E7;
 }
 
@@ -15,6 +15,7 @@ body{
 		float: left;
 		position: relative;
 		left: 50%;
+		margin-bottom: 25px;
 		border: 0px solid red;
 }
 
@@ -23,7 +24,7 @@ body{
 }
 
 #content{
-		background-color: #6D778A;
+		background-color: #5D7699;
 		padding: 25px;
 		overflow: auto;
 }
@@ -51,7 +52,7 @@ body{
 		padding: 6px 10px;
 		color: #FFF;
 		display: block;
-		background-color: #A5B2C9;
+		background-color: #A3B9D9;
 		text-decoration: none;
 }
 
@@ -60,7 +61,7 @@ body{
 }
 
 .menu li a:hover{
-		background-color: #6D778A;
+		background-color: #5D7699;
 }
 
 .nav li a:hover{
@@ -68,7 +69,7 @@ body{
 }
 
 .menu li a.selected{
-		background-color: #6D778A;
+		background-color: #5D7699;
 		padding-bottom: 11px;
 }
 
@@ -94,7 +95,7 @@ body{
 		padding: 25px;
 		float: left;
 		overflow: auto;
-		margin: 20px 0;
+		margin-top: 25px;
 		clear: both;
 }
 
@@ -176,4 +177,49 @@ label{
 
 .hosts{
 		width: 350px;
+}
+
+.paginator{
+		margin: 0;
+		margin-bottom: 10px;
+}
+
+.btn,
+.counter{
+	display: inline-block;
+	text-align: center;
+	vertical-align: middle;
+	padding: 6px 12px;
+	border-radius: 6px;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+
+}
+
+.counter{
+		background-color: #d0d0d0;
+		color: #353535;
+}
+
+.next,
+.previous{
+      text-decoration: none;
+      color: #FFF;
+      background-color: #428bca;
+      border-color: #357ebd;
+}
+
+.next:hover,
+.previous:hover{
+                 color: #FFF;
+                 background-color: #3071a9;
+                 border-color: #285e8e;
+}
+
+.inactive{
+		background-color: #858585;
+}
+
+.inactive:hover{
+		background-color: #858585;
 }

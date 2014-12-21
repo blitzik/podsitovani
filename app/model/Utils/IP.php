@@ -70,4 +70,14 @@ use App\Subnetting\Model\Address;
 			return self::long2ip($result);
 		}
 
+		/**
+		 *
+		 * @param int $hosts
+		 * @return int
+		 */
+		public static function calcBlockOfAddresses($hosts)
+		{
+			return (int)pow(2, (ceil(log($hosts, 2))));
+		}
+
 	}

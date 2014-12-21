@@ -4,7 +4,7 @@ namespace App\Subnetting\Model\Factories\Forms;
 
 use Nette\Application\UI\Form;
 
-	class CalculatorFormFactory
+	class CalculatorFormFactory extends \Nette\Object
 	{
 		/**
 		 * @return Form
@@ -36,7 +36,7 @@ use Nette\Application\UI\Form;
 			return $form;
 		}
 
-		public function masksForSelect($start)
+		private function masksForSelect($start)
 		{
 			if ($start == NULL) return NULL;
 

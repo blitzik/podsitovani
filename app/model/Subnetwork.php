@@ -74,7 +74,7 @@ use App\Subnetting\Model\Utils\IP,
 		{
 			$hosts = $this->checkNumberOfHosts($hosts);
 
-			return (int)pow(2, (ceil(log($hosts, 2))));
+			return IP::calcBlockOfAddresses($hosts);
 		}
 
 		/**

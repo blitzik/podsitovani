@@ -6,9 +6,10 @@ use \Nette\Application\UI\Form,
 	\App\Subnetting\Model,
 	\App\Subnetting\Model\Components,
 	\App\Subnetting\Model\Calculators,
-	\App\Subnetting\Exceptions\LogicExceptions;
+	\App\Subnetting\Exceptions\LogicExceptions,
+	App\Subnetting\Model\Utils\IP;
 
-	class VlsmPresenter extends BasePresenter
+	class VlsmPresenter extends CalculatorPresenter
 	{
 		/**
 		 *
@@ -16,9 +17,41 @@ use \Nette\Application\UI\Form,
 		 */
 		private $vlsmCalculator;
 
-		public function renderDefault()
+		private $results;
+
+		const SESSION_SECTION = 'vlsm';
+
+		public function actionCalc()
+		{
+			if ($this->session->hasSection(self::SESSION_SECTION)) {
+
+				$vlsm = $this->session->getSection(self::SESSION_SECTION);
+
+				$this['calculatorForm']['ip']->setDefaultValue($vlsm->ip);
+				$this['calculatorForm']['mask']->setDefaultValue($vlsm->mask);
+				$this['calculatorForm']['hosts']->setDefaultValue($vlsm->hosts);
+
+				$network = new Model\Network(new Model\IpAddress($vlsm->ip), new Model\SubnetMask($vlsm->mask));
+				$this->vlsmCalculator = new Calculators\VLSMCalculator($network, $vlsm->hosts);
+
+				$paginator = $this['paginator']->getPaginator();
+				$paginator->setItemCount(count($this->vlsmCalculator->getNetworkHosts()));
+				$this->results = $this->vlsmCalculator->getSubnetworks($paginator->getOffset(), $paginator->getLength());
+			}
+		}
+
+		public function renderCalc()
 		{
 			$this->template->calculator = $this->vlsmCalculator;
+			$this->template->results = $this->results;
+		}
+
+		protected function createComponentPaginator()
+		{
+			$vp = new \Components\VisualPaginator(TRUE);
+			$vp->getPaginator()->setItemsPerPage(10);
+
+			return $vp;
 		}
 
 		protected function createComponentNetworkInfo()
@@ -32,6 +65,10 @@ use \Nette\Application\UI\Form,
 		{
 			$form = $this->calculatorFormFactory->create(30);
 
+			$form->addSubmit('reset', 'Reset')
+					->setValidationScope(FALSE)
+					->onClick[] = $this->processReset;
+
 			$form->onSuccess[] = $this->processSubmit;
 
 			$form->getElementPrototype()->id = 'calcForm';
@@ -39,6 +76,13 @@ use \Nette\Application\UI\Form,
 			unset($form['mask2']);
 
 			return $form;
+		}
+
+		public function processReset(\Nette\Forms\Controls\Button $form)
+		{
+			$this->session->getSection(self::SESSION_SECTION)->remove();
+			$this->flashMessage('Kalkulátor byl úspěšně vyresetován.', 'success');
+			$this->redirect('this');
 		}
 
 		public function processSubmit(Form $form)
@@ -51,36 +95,25 @@ use \Nette\Application\UI\Form,
 
 				$VLSMCalculator = new Calculators\VLSMCalculator($network, $values['hosts']);
 
-				$this->vlsmCalculator = $VLSMCalculator;
+				$vlsm = $this->session->getSection(self::SESSION_SECTION);
+
+				$vlsm->ip = $values['ip'];
+				$vlsm->mask = $values['mask'];
+				$vlsm->hosts = $values['hosts'];
+
+				$vlsm->setExpiration(0);
+
+				$this->redirect('this');
 
 			} catch (LogicExceptions\InvalidIpAddressException $ip) {
 
 				$form->addError('IP adresa nemá platný formát.');
 				return;
-			/*} catch (LogicExceptions\InvalidSubnetMaskFormatException $sm) {
-
-				$this->flashMessage('Maska podsítě nemá platný formát.', 'errors');
-				return;
-			} catch (LogicExceptions\InvalidPrefixException $ipe) {
-
-				$this->flashMessage('Prefix nemá platný formát.', 'errors');
-				return;
-			} catch (LogicExceptions\PrefixOutOfRangeException $p) {
-
-				$this->flashMessage('Prefix lze zadat pouze v rozmezí 1 - 30', 'errors');
-				return;*/
 			} catch (LogicExceptions\InvalidNumberOfHostsException $inoh) {
 
 				$form->addError('Neplatný formát zadaných hostů');
 				return;
-			}/* catch (LogicExceptions\SpecialSubnetMaskException $sm) {
-
-				$link = $this->link('Mask:default');
-
-				$this->flashMessage('Tuto masku <a href="' .$link. '">nelze využít</a> pro podsíťování.', 'errors');
-				return;
-			}*/
-
+			}
 		}
 
 	}

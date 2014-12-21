@@ -3,7 +3,8 @@
 namespace App\Subnetting\Model\Calculators;
 
 use App\Subnetting\Model,
-	App\Subnetting\Exceptions\LogicExceptions;
+	App\Subnetting\Exceptions\LogicExceptions,
+	App\Subnetting\Model\Utils\IP;
 
 	class VLSMCalculator extends Calculator
 	{
@@ -36,19 +37,41 @@ use App\Subnetting\Model,
 
 			$this->networkHosts = $this->prepareValidNumberOfHosts($hosts);
 			rsort($this->networkHosts);
-
-			$this->calculateSubnetworks();
 		}
 
-		private function calculateSubnetworks()
+		/**
+		 *
+		 * @param int $offset
+		 * @param int $length
+		 * @return Array
+		 */
+		private function calculateSubnetworks($offset, $length)
 		{
-			$this->subnetworks[0] = $this->calcNextSubnet($this->network->getNetworkAddress(), $this->networkHosts[0]);
+			$baseAddress = IP::ip2long($this->network->getNetworkAddress());
+			$startAddress = IP::long2ip($baseAddress + $this->calcBlocksFromBeginningToOffset($offset));
 
-			for ($i = 1; $i < count($this->networkHosts); $i++) {
+			$this->subnetworks[0] = $this->calcNextSubnet(new Model\IpAddress($startAddress), $this->networkHosts[$offset]);
 
-				$this->subnetworks[$i] = $this->calcNextSubnet($this->findNextAddress($this->subnetworks[$i - 1]->getBroadcastAddress()),
-														$this->networkHosts[$i]);
+			for ($i = 1; $i < $length; $i++) {
+				$this->subnetworks[$i] = $this->calcNextSubnet($this->findNextAddress($this->subnetworks[$i - 1]->getBroadcastAddress()), $this->networkHosts[$offset + $i]);
 			}
+
+			return $this->subnetworks;
+		}
+
+		/**
+		 *
+		 * @param int $offset
+		 * @return int
+		 */
+		protected function calcBlocksFromBeginningToOffset($offset)
+		{
+			$totalAddresses = 0;
+			for ($i = 0; $i < $offset; $i++) {
+				$totalAddresses += IP::calcBlockOfAddresses($this->networkHosts[$i]);
+			}
+
+			return $totalAddresses;
 		}
 
 		/**
@@ -134,9 +157,9 @@ use App\Subnetting\Model,
 		 *
 		 * @return array
 		 */
-		public function getSubnetworks()
+		public function getSubnetworks($offset, $length)
 		{
-			return $this->subnetworks;
+			return $this->calculateSubnetworks($offset, $length);
 		}
 
 		/**

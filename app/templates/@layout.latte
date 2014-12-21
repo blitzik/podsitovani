@@ -27,11 +27,11 @@
 
 	<div id="container">
 		<div id="wrapper">
-			<h1><a href="{$basePath}">IP kalkulátor</a></h1>
+			<h1><a href="{link Homepage:default}">IP kalkulátor</a></h1>
 			<ul class="menu">
-				<li><a href="{$basePath}"{ifCurrent Homepage:default} class="selected"{/ifCurrent}>Informace o síti</a></li>
-				<!--<li><a href="{link Cidr:default}"{ifCurrent Cidr:default} class="selected"{/ifCurrent}>CIDR</a></li>-->
-				<li><a href="{link Vlsm:default}"{ifCurrent Vlsm:default} class="selected"{/ifCurrent}>VLSM</a></li>
+				<li><a href="{link Homepage:default}"{ifCurrent Homepage:default} class="selected"{/ifCurrent}>Info o adrese</a></li>
+				<li><a href="{link Cidr:calc}"{ifCurrent Cidr:calc} class="selected"{/ifCurrent}>CIDR</a></li>
+				<li><a href="{link Vlsm:calc}"{ifCurrent Vlsm:calc} class="selected"{/ifCurrent}>VLSM</a></li>
 				<li><a href="{link Mask:default}"{ifCurrent Mask:default} class="selected"{/ifCurrent}>Počet hostů dle masky</a></li>
 			</ul>
 		<div id="content">

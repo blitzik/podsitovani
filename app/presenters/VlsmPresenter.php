@@ -6,11 +6,19 @@ use \Nette\Application\UI\Form,
 	\App\Subnetting\Model,
 	\App\Subnetting\Model\Components,
 	\App\Subnetting\Model\Calculators,
-	\App\Subnetting\Exceptions\LogicExceptions,
-	App\Subnetting\Model\Utils\IP;
+	\App\Subnetting\Exceptions\LogicExceptions;
 
 	class VlsmPresenter extends CalculatorPresenter
 	{
+		const SESSION_SECTION = 'vlsm';
+
+		/**
+		 *
+		 * @var Model\Factories\Networks\NetworkFactory
+		 * @inject
+		 */
+		public $networkFactory;
+
 		/**
 		 *
 		 * @var Calculators\VLSMCalculator
@@ -18,8 +26,6 @@ use \Nette\Application\UI\Form,
 		private $vlsmCalculator;
 
 		private $results;
-
-		const SESSION_SECTION = 'vlsm';
 
 		public function actionCalc()
 		{
@@ -31,7 +37,7 @@ use \Nette\Application\UI\Form,
 				$this['calculatorForm']['mask']->setDefaultValue($vlsm->mask);
 				$this['calculatorForm']['hosts']->setDefaultValue($vlsm->hosts);
 
-				$network = new Model\Network(new Model\IpAddress($vlsm->ip), new Model\SubnetMask($vlsm->mask));
+				$network = $this->networkFactory->createNetwork($vlsm->ip, $vlsm->mask);
 				$this->vlsmCalculator = new Calculators\VLSMCalculator($network, $vlsm->hosts);
 
 				$paginator = $this['paginator']->getPaginator();
@@ -90,8 +96,7 @@ use \Nette\Application\UI\Form,
 			$values = $form->getValues();
 
 			try {
-				$network = new Model\Network(new Model\IpAddress($values['ip']),
-										new Model\SubnetMask($values['mask']));
+				$network = $this->networkFactory->createNetwork($values['ip'], $values['mask']);
 
 				$VLSMCalculator = new Calculators\VLSMCalculator($network, $values['hosts']);
 

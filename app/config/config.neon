@@ -24,6 +24,7 @@ nette:
 services:
 
 	- App\Subnetting\Model\Factories\Forms\CalculatorFormFactory
+	- App\Subnetting\Model\Factories\Networks\NetworkFactory
 
 	- App\Subnetting\RouterFactory
 	router: @App\Subnetting\RouterFactory::createRouter

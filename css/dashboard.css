@@ -184,8 +184,12 @@ label{
 		margin-bottom: 10px;
 }
 
-.btn,
+.p-btn,
 .counter{
+	text-decoration: none;
+     color: #FFF;
+     background-color: #428bca;
+     border-color: #357ebd;
 	display: inline-block;
 	text-align: center;
 	vertical-align: middle;
@@ -201,16 +205,7 @@ label{
 		color: #353535;
 }
 
-.next,
-.previous{
-      text-decoration: none;
-      color: #FFF;
-      background-color: #428bca;
-      border-color: #357ebd;
-}
-
-.next:hover,
-.previous:hover{
+.p-btn:hover{
                  color: #FFF;
                  background-color: #3071a9;
                  border-color: #285e8e;

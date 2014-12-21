@@ -36,7 +36,7 @@ use Nette\Application\UI\Form;
 			return $form;
 		}
 
-		private function masksForSelect($start)
+		public function masksForSelect($start)
 		{
 			if ($start == NULL) return NULL;
 

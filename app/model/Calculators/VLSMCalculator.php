@@ -90,6 +90,16 @@ use App\Subnetting\Model,
 
 		/**
 		 *
+		 * @param int $number
+		 * @return int
+		 */
+		private function calcCIDRbasedOnNumberOfHosts($number)
+		{
+			return (int)(32 - ceil(log($number, 2)));
+		}
+
+		/**
+		 *
 		 * @return int
 		 */
 		public function getTotalNumberOfHostsInBlocks()
@@ -97,6 +107,22 @@ use App\Subnetting\Model,
 			$boa = $this->getTotalNumberOfBlockAddresses();
 
 			return (int)($boa - (2 * count($this->networkHosts)));
+		}
+
+
+		/**
+		 * @return Model\SubnetMask
+		 */
+		public function getRecommendedSubnetMask()
+		{
+			$numberOfHostsProvidedByMask = $this->network->getSubnetMask()->getNumberOfHostsProvidedByMask();
+			if ($numberOfHostsProvidedByMask < $this->getTotalNumberOfBlockAddresses()) {
+
+				$cidr = 32 - ceil(log(IP::calcBlockOfAddresses($this->getTotalNumberOfBlockAddresses()), 2));
+				return new Model\SubnetMask($cidr);
+			}
+
+			return $this->network->getSubnetMask();
 		}
 
 		/**
@@ -124,89 +150,11 @@ use App\Subnetting\Model,
 
 		/**
 		 *
-		 * @return boolean
-		 */
-		public function isNetworkRangeBigEnough()
-		{
-			if ($this->network->getNumberOfValidHosts() < $this->getTotalNumberOfHostsInBlocks()) {
-				return FALSE;
-			}
-
-			return TRUE;
-		}
-
-		/**
-		 *
-		 * @return Network
-		 */
-		public function getNetwork()
-		{
-			return $this->network;
-		}
-
-		/**
-		 *
-		 * @return array
-		 */
-		public function getNetworkHosts()
-		{
-			return $this->networkHosts;
-		}
-
-		/**
-		 *
 		 * @return array
 		 */
 		public function getSubnetworks($offset, $length)
 		{
 			return $this->calculateSubnetworks($offset, $length);
-		}
-
-		/**
-		 *
-		 * @param array $hosts
-		 * @return array
-		 */
-		private function prepareValidNumberOfHosts(array $hosts)
-		{
-			return array_map(function ($host) { return $host + 2;}, $hosts);
-		}
-
-		/**
-		 *
-		 * @param array $hosts
-		 * @return boolean Returns TRUE if hosts have valid format, otherwise FALSE
-		 */
-		private function areHostsValid(array $hosts)
-		{
-			foreach ($hosts as $host) {
-				$host = trim($host);
-				if (!ctype_digit($host) OR $host == 0) {
-					return FALSE;
-				}
-			}
-
-			return TRUE;
-		}
-
-		/**
-		 *
-		 * @param String $hosts
-		 * @return array
-		 */
-		private function separateNumberOfHosts($hosts)
-		{
-			return explode(',', $hosts);
-		}
-
-		/**
-		 *
-		 * @param int $number
-		 * @return int
-		 */
-		private function calcCIDRbasedOnNumberOfHosts($number)
-		{
-			return (int)(32 - ceil(log($number, 2)));
 		}
 
 		/**
@@ -229,6 +177,74 @@ use App\Subnetting\Model,
 			$percentage = $this->getTotalNumberOfGivenHosts() / ($this->getTotalNumberOfBlockAddresses() - (2 * count($this->networkHosts))) * 100;
 
 			return number_format($percentage, 1, ',', ' ');
+		}
+
+		/**
+		 *
+		 * @param array $hosts
+		 * @return boolean Returns TRUE if hosts have valid format, otherwise FALSE
+		 */
+		private function areHostsValid(array $hosts)
+		{
+			foreach ($hosts as $host) {
+				$host = trim($host);
+				if (!ctype_digit($host) OR $host == 0) {
+					return FALSE;
+				}
+			}
+
+			return TRUE;
+		}
+
+		/**
+		 *
+		 * @return boolean
+		 */
+		public function isNetworkRangeBigEnough()
+		{
+			if ($this->network->getNumberOfValidHosts() < $this->getTotalNumberOfHostsInBlocks()) {
+				return FALSE;
+			}
+
+			return TRUE;
+		}
+
+		/**
+		 *
+		 * @param array $hosts
+		 * @return array
+		 */
+		private function prepareValidNumberOfHosts(array $hosts)
+		{
+			return array_map(function ($host) { return $host + 2;}, $hosts);
+		}
+
+		/**
+		 *
+		 * @param String $hosts
+		 * @return array
+		 */
+		private function separateNumberOfHosts($hosts)
+		{
+			return explode(',', $hosts);
+		}
+
+		/**
+		 *
+		 * @return Network
+		 */
+		public function getNetwork()
+		{
+			return $this->network;
+		}
+
+		/**
+		 *
+		 * @return array
+		 */
+		public function getNetworkHosts()
+		{
+			return $this->networkHosts;
 		}
 
 	}

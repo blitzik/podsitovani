@@ -10,7 +10,7 @@ use App\Subnetting\Model\Address;
 
 		/**
 		 *
-		 * @param \App\Subnetting\Model\Address $address
+		 * @param Address $address
 		 * @return float A proper address representation
 		 */
 		public static function ip2long($address)
@@ -31,8 +31,8 @@ use App\Subnetting\Model\Address;
 
 		/**
 		 *
-		 * @param \App\Subnetting\Model\Address $a
-		 * @param \App\Subnetting\Model\Address $b
+		 * @param Address $a
+		 * @param Address $b
 		 * @return string Returns the Internet IP address as a string
 		 */
 		public static function logic_and(Address $a, Address $b)
@@ -45,8 +45,8 @@ use App\Subnetting\Model\Address;
 
 		/**
 		 *
-		 * @param \App\Subnetting\Model\Address $a
-		 * @param \App\Subnetting\Model\Address $b
+		 * @param Address $a
+		 * @param Address $b
 		 * @return string Returns the Internet IP address as a string
 		 */
 		public static function logic_or(Address $a, Address $b)
@@ -59,7 +59,7 @@ use App\Subnetting\Model\Address;
 
 		/**
 		 *
-		 * @param \App\Subnetting\Model\Address $address
+		 * @param Address $address
 		 * @return string Returns the Internet IP address as a string
 		 */
 		public static function logic_not(Address $address)

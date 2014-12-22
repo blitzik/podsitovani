@@ -1,4 +1,4 @@
-{block #title}Podsíťování podle VLSM{/block}
+{block title}Podsíťování podle VLSM{/block}
 
 {block content}
 	{form calculatorForm}
@@ -18,6 +18,10 @@
 				Podsíťování selhalo! Maska <b>{$calculator->getNetwork()->getSubnetMask()}</b> neposkytuje dostatečné
 				množství adres pro vytvoření všech podsítí.
 			</p>
+			<p class="box subnetting-recommendation">
+				Pro vytvoření všech podsítí snižte počet požadovaných hostů
+				nebo využijte masky, která poskytne dostatečné množství adres.
+				Např: <b>/{$calculator->getRecommendedSubnetMask()->getPrefix()} [{$calculator->getRecommendedSubnetMask()}]</b></p>
 		{/if}
 	{/if}
 	{/form calculatorForm}
@@ -32,6 +36,7 @@
 		<h2>Podsítě</h2>
 		<div class="box">
 			{control paginator}
+
 			<table>
 				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th>
 					<th>Adresa sítě</th><th>Broadcast</th><th>Rozsah adres pro hosty</th></tr>

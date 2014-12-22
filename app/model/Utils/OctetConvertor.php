@@ -11,7 +11,7 @@ use \Nette\Utils\Validators,
 
 		/**
 		 *
-		 * @param App\Subnetting\Model\Address $ipAddress
+		 * @param Address $ipAddress
 		 * @return String Binary format of IP address
 		 */
 		public static function convertIpFromDecimalToBinary(Address $ipAddress)
@@ -27,7 +27,7 @@ use \Nette\Utils\Validators,
 		/**
 		 *
 		 * @param string $ipAddress
-		 * @return String Decimal format of IP address
+		 * @return string Decimal format of IP address
 		 */
 		public static function convertIpFromBinaryToDecimal($ipAddress)
 		{
@@ -41,7 +41,7 @@ use \Nette\Utils\Validators,
 
 		/**
 		 *
-		 * @param \App\Subnetting\Model\Address $ipAddress
+		 * @param Address $ipAddress
 		 * @return array
 		 */
 		public static function separateOctets(Address $ipAddress)
@@ -52,7 +52,7 @@ use \Nette\Utils\Validators,
 		/**
 		 *
 		 * @param int $number
-		 * @return int
+		 * @return string Binary representation of number with leading zeros
 		 * @throws \InvalidArgumentException
 		 */
 		public static function convertNumberToBinary($number)
@@ -61,25 +61,9 @@ use \Nette\Utils\Validators,
 				throw new \InvalidArgumentException('Only integer numbers are allowed.');
 			}
 
-			$bit = 0;
-			$sequenceOfBits = '';
-			for ($i = 7; $i >= 0; $i--) {
+			$bin = decbin($number);
 
-				$remainder = $number - pow(2, $i);
-
-				if ($remainder >= 0) {
-					$number -= pow(2, $i);
-					$bit = 1;
-				}
-
-				if ($remainder < 0) {
-					$bit = 0;
-				}
-
-			$sequenceOfBits .= $bit;
-			}
-
-			return $sequenceOfBits;
+			return str_pad($bin, 8, '0', STR_PAD_LEFT);
 		}
 
 		/**

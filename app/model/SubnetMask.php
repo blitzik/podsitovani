@@ -67,9 +67,9 @@ use \Nette\Utils\Validators,
 			return $invertedMask;
 		}
 
+
 		/**
-		 *
-		 * @param String $subnetMask
+		 * @param SubnetMask $mask
 		 * @return IpAddress
 		 */
 		private function createWildCard(SubnetMask $mask)
@@ -77,12 +77,12 @@ use \Nette\Utils\Validators,
 			return new IpAddress(IP::logic_not($mask));
 		}
 
+
 		/**
-		 *
-		 * @param String $mask (255.255.224.0)
+		 * @param SubnetMask $mask
 		 * @return int
-		 * @throws LogicExceptions\InvalidSubnetMaskFormatException
 		 * @throws LogicExceptions\SpecialSubnetMaskException
+		 * @throws LogicExceptions\InvalidSubnetMaskFormatException
 		 */
 		private function mask2cidr(SubnetMask $mask)
 		{
@@ -167,6 +167,9 @@ use \Nette\Utils\Validators,
 			return (abs($number - round($number)) < 0.000000001) ? TRUE : FALSE;
 		}
 
+		/**
+		 * @return string
+		 */
 		public function __toString()
 		{
 			return $this->address;

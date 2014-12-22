@@ -110,17 +110,23 @@ body{
 }
 
 .box th{
-			background-color: #E5E5E5;
+		background-color: #E5E5E5;
 }
 
 .box table tr:hover{
 			background-color: #DEF0FF;
 }
 
-.subnetting-failed{
+.subnetting-failed,
+.subnetting-recommendation{
 				width: 400px;
 				background-color: #FFADC0;
 				color: #7D2A3E;
+}
+
+.subnetting-recommendation{
+				background-color: #bef4a9;
+				color: #006600;
 }
 
 .notice{
@@ -187,9 +193,9 @@ label{
 .p-btn,
 .counter{
 	text-decoration: none;
-     color: #FFF;
-     background-color: #428bca;
-     border-color: #357ebd;
+	color: #FFF;
+	background-color: #428bca;
+	border-color: #357ebd;
 	display: inline-block;
 	text-align: center;
 	vertical-align: middle;

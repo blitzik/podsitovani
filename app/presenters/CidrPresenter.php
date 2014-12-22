@@ -3,11 +3,10 @@
 namespace App\Subnetting\Presenters;
 
 use App\Subnetting\Model,
-	App\Subnetting\Model\Calculators,
-	App\Subnetting\Exceptions\LogicExceptions,
-	\Nette\Application\UI\Form,
-    App\Subnetting\Model\Components,
-	App\Subnetting\Model\Utils\IP;
+    App\Subnetting\Model\Calculators,
+    App\Subnetting\Exceptions\LogicExceptions,
+    \Nette\Application\UI\Form,
+    App\Subnetting\Model\Components;
 
 	class CidrPresenter extends CalculatorPresenter
 	{
@@ -32,8 +31,8 @@ use App\Subnetting\Model,
 				$this['calculatorForm']['mask2']->setDefaultValue($cidr->mask2);
 
 				$this->cidrCalculator = new Calculators\CIDRCalculator(new Model\IpAddress($cidr->ip),
-															new Model\SubnetMask($cidr->mask),
-															new Model\SubnetMask($cidr->mask2));
+																		new Model\SubnetMask($cidr->mask),
+																		new Model\SubnetMask($cidr->mask2));
 
 				$paginator = $this['paginator']->getPaginator();
 				$paginator->setItemCount($this->cidrCalculator->getNumberOfSubNetworks());
@@ -53,7 +52,7 @@ use App\Subnetting\Model,
 		protected function createComponentPaginator()
 		{
 			$vp = new \Components\VisualPaginator(TRUE);
-			$vp->getPaginator()->setItemsPerPage(10);
+			$vp->getPaginator()->setItemsPerPage(15);
 
 			return $vp;
 		}
@@ -71,11 +70,11 @@ use App\Subnetting\Model,
 
 				$items = $this->calculatorFormFactory->maskForCIDR($value);
 				$this['calculatorForm']['mask2']->setPrompt('Vyberte masku')
-										->setItems($items);
+				    							->setItems($items);
 			} else {
 
 				$this['calculatorForm']['mask2']->setPrompt('Vyberte masku')
-										->setItems(array());
+				    							->setItems(array());
 			}
 
 			$this->redrawControl('secondMask');
@@ -86,8 +85,8 @@ use App\Subnetting\Model,
 			$form = $this->calculatorFormFactory->create(29, 30);
 
 			$form->addSubmit('reset', 'Reset')
-					->setValidationScope(FALSE)
-					->onClick[] = $this->processReset;
+			    	->setValidationScope(FALSE)
+			    	->onClick[] = $this->processReset;
 
 			$form->onSuccess[] = $this->processSubmit;
 
@@ -117,8 +116,8 @@ use App\Subnetting\Model,
 
 			try {
 				$cidrCalculator = new Calculators\CIDRCalculator(new Model\IpAddress($values['ip']),
-														new Model\SubnetMask($values['mask']),
-														new Model\SubnetMask($values['mask2']));
+																new Model\SubnetMask($values['mask']),
+																new Model\SubnetMask($values['mask2']));
 
 				$cidr = $this->session->getSection(self::SESSION_SECTION);
 

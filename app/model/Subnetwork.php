@@ -50,16 +50,15 @@ use App\Subnetting\Model\Utils\IP,
 		}
 
 		/**
-		 *
-		 * @param int $hosts
-		 * @return int
-		 * @throws LogicExceptions\InvalidNumberOfHostsException
-		 */
+	 	 * @param $hosts
+	 	 * @return int
+	 	 * @throws InvalidNumberOfHostsException
+	 	 */
 		private function checkNumberOfHosts($hosts)
 		{
 			$hosts = trim($hosts);
 			if (!ctype_digit($hosts) OR $hosts == 0) {
-				throw new \LogicExceptions\InvalidNumberOfHostsException('Invalid number of hosts. Only whole number bigger than 0 is allowed. "' .$hosts. '" given.');
+				throw new InvalidNumberOfHostsException('Invalid number of hosts. Only whole number bigger than 0 is allowed. "' .$hosts. '" given.');
 			}
 
 			return (int)$hosts;
@@ -110,7 +109,7 @@ use App\Subnetting\Model\Utils\IP,
 
 		public function getAmountOfUsedAddressSpace()
 		{
-			return number_format((($this->hosts/$this->blockOfAddresses)*100), 1, ',', ' ');
+			return number_format((($this->hosts / $this->blockOfAddresses) * 100), 1, ',', ' ');
 		}
 
 	}

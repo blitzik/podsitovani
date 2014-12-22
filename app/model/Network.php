@@ -6,7 +6,6 @@ use App\Subnetting\Model\Utils\IP;
 
 	class Network
 	{
-
 		/**
 		 *
 		 * @var IpAddress
@@ -45,7 +44,7 @@ use App\Subnetting\Model\Utils\IP;
 
 
 		public function __construct(Address $ipAddress, SubnetMask $mask)
-	     {
+		{
 			$this->ipAddress = $ipAddress;
 			$this->subnetMask = $mask;
 
@@ -180,7 +179,7 @@ use App\Subnetting\Model\Utils\IP;
 
 		/**
 		 *
-		 * @param IpAddress $ipAddress
+		 * @param Address $ipAddress
 		 * @return boolean
 		 */
 		public function isIPFromNetwork(Address $ipAddress)

@@ -3,10 +3,11 @@
 namespace App\Subnetting\Presenters;
 
 use \Nette\Application\UI\Form,
-	\App\Subnetting\Model,
-	\App\Subnetting\Model\Components,
-	\App\Subnetting\Model\Calculators,
-	\App\Subnetting\Exceptions\LogicExceptions;
+	App\Subnetting\Model,
+	App\Subnetting\Model\Calculators,
+	App\Subnetting\Exceptions\LogicExceptions,
+	Components\VisualPaginator,
+	App\Subnetting\Model\Components\NetworkInfo;
 
 	class VlsmPresenter extends CalculatorPresenter
 	{
@@ -54,7 +55,7 @@ use \Nette\Application\UI\Form,
 
 		protected function createComponentPaginator()
 		{
-			$vp = new \Components\VisualPaginator(TRUE);
+			$vp = new VisualPaginator(TRUE);
 			$vp->getPaginator()->setItemsPerPage(10);
 
 			return $vp;
@@ -62,7 +63,7 @@ use \Nette\Application\UI\Form,
 
 		protected function createComponentNetworkInfo()
 		{
-			$networkInfo = new Components\NetworkInfo($this->vlsmCalculator->getNetwork());
+			$networkInfo = new NetworkInfo($this->vlsmCalculator->getNetwork());
 
 			return $networkInfo;
 		}

@@ -9,7 +9,7 @@ use Nette\Application\UI\Control,
 	{
 		/**
 		 *
-		 * @var \Model\Network;
+		 * @var Model\Network
 		 */
 		private $network;
 

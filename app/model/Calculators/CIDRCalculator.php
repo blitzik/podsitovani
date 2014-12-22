@@ -82,6 +82,15 @@ use App\Subnetting\Model,
 			return pow(2, $this->mask->getPrefix() - $this->subnetMask->getPrefix());
 		}
 
+
+		/**
+		 * @return int
+		 */
+		public function getNumberOfAddressesInSubnet()
+		{
+			return $this->mask->getNumberOfHostsProvidedByMask();
+		}
+
 		/**
 		 *
 		 * @return Model\Network

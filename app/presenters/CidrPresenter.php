@@ -18,27 +18,17 @@ use App\Subnetting\Model,
 		 */
 		private $cidrCalculator;
 
-		private $results;
-
 		public function actionCalc()
 		{
 			if ($this->session->hasSection(self::SESSION_SECTION)) {
 
 				$cidr = $this->session->getSection(self::SESSION_SECTION);
 
-				$this['calculatorForm']['ip']->setDefaultValue($cidr->ip);
-				$this['calculatorForm']['mask']->setDefaultValue($cidr->mask);
-				$this['calculatorForm']['mask2']->setDefaultValue($cidr->mask2);
+				$this['calculatorForm']['ip']->setDefaultValue($cidr->calculator->getNetwork()->getIpAddress());
+				$this['calculatorForm']['mask']->setDefaultValue($cidr->calculator->getSubnetMask()->getPrefix());
+				$this['calculatorForm']['mask2']->setDefaultValue($cidr->calculator->getSubnetMask2()->getPrefix());
 
-				$this->cidrCalculator = new Calculators\CIDRCalculator(new Model\IpAddress($cidr->ip),
-																		new Model\SubnetMask($cidr->mask),
-																		new Model\SubnetMask($cidr->mask2));
-
-				$paginator = $this['paginator']->getPaginator();
-				$paginator->setItemCount($this->cidrCalculator->getNumberOfSubNetworks());
-
-				$this->results = $this->cidrCalculator->calculateSubnets($paginator->getOffset(), $paginator->getLength());
-
+				$this->cidrCalculator = $cidr->calculator;
 			}
 		}
 
@@ -46,20 +36,18 @@ use App\Subnetting\Model,
 		{
 			$this->template->_form = $this['calculatorForm'];
 			$this->template->calculator = $this->cidrCalculator;
-			$this->template->results = $this->results;
 		}
 
-		protected function createComponentPaginator()
+		public function createComponentSubnetworks()
 		{
-			$vp = new \Components\VisualPaginator(TRUE);
-			$vp->getPaginator()->setItemsPerPage(15);
+			$subnetworks = new Model\Components\SubnetworksControl($this->cidrCalculator);
 
-			return $vp;
+			return $subnetworks;
 		}
 
 		protected function createComponentNetworkInfo()
 		{
-			$networkInfo = new Components\NetworkInfo($this->cidrCalculator->getNetwork());
+			$networkInfo = new Components\NetworkInfoControl($this->cidrCalculator->getNetwork());
 
 			return $networkInfo;
 		}
@@ -100,6 +88,8 @@ use App\Subnetting\Model,
 		public function processReset(\Nette\Forms\Controls\Button $form)
 		{
 			$this->session->getSection(self::SESSION_SECTION)->remove();
+			unset($this['subnetworks']['paginator']);
+
 			$this->flashMessage('Kalkulátor byl úspěšně vyresetován.', 'success');
 			$this->redirect('this');
 		}
@@ -121,9 +111,7 @@ use App\Subnetting\Model,
 
 				$cidr = $this->session->getSection(self::SESSION_SECTION);
 
-				$cidr->ip = $values['ip'];
-				$cidr->mask = $values['mask'];
-				$cidr->mask2 = $values['mask2'];
+				$cidr->calculator = $cidrCalculator;
 
 				$cidr->setExpiration(0);
 

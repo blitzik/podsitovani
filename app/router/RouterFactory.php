@@ -20,7 +20,7 @@ class RouterFactory
 	public function createRouter()
 	{
 		$router = new RouteList();
-		$router[] = new Route('<presenter>/<action>[/<ip>/<mask>/] ? page=<paginator-page>', 'Homepage:default');
+		$router[] = new Route('<presenter>/<action>/ ? page=<subnetworks-paginator-page>', 'Homepage:default');
 		return $router;
 	}
 

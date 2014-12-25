@@ -17,33 +17,7 @@
 		{control networkInfo}
 	</div>
 
-	<div class="results">
-
-		<h2>Podsítě</h2>
-		<div class="box">
-			{control paginator}
-			<table>
-				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th>
-					<th>Adresa sítě</th><th>Broadcast</th><th>Rozsah adres pro hosty</th></tr>
-
-				{foreach $results as $subnet}
-
-					<tr>
-						<td>{$subnet->getHosts()-2|number:0:',':' '} <small>(+2)</small></td>
-						<td>{$subnet->getBlockOfAddresses()|number:0:',':' '}</td>
-						<td>/{$subnet->getSubnetMask()->getPrefix()}</td>
-						<td><a title="{$subnet->getSubnetMask()->getAddressInBinary()}">{$subnet->getSubnetMask()}</a></td>
-						<td><a title="{$subnet->getNetworkAddress()->getAddressInBinary()}">{$subnet->getNetworkAddress()}</a></td>
-						<td><a title="{$subnet->getBroadcastAddress()->getAddressInBinary()}">{$subnet->getBroadcastAddress()}</a></td>
-						<td><a title="{$subnet->getFirstValidHost()->getAddressInBinary()}">{$subnet->getFirstValidHost()}</a> -
-							<a title="{$subnet->getLastValidHost()->getAddressInBinary()}">{$subnet->getLastValidHost()}</a></td>
-					</tr>
-				{/foreach}
-
-			</table>
-
-		</div>
-	</div>
+		{control subnetworks}
 	{/if}
 	
 <script>

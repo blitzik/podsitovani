@@ -5,7 +5,7 @@ namespace App\Subnetting\Model\Calculators;
 use App\Subnetting\Model,
     App\Subnetting\Model\Utils\IP;
 
-	class CIDRCalculator extends Calculator
+	class CIDRCalculator extends Calculator implements ICalculator
 	{
 		/**
 		 *
@@ -33,8 +33,8 @@ use App\Subnetting\Model,
 
 
 		public function __construct(Model\IpAddress $ipAddress,
-								Model\SubnetMask $subnetMask,
-								Model\SubnetMask $mask)
+									Model\SubnetMask $subnetMask,
+									Model\SubnetMask $mask)
 		{
 			$this->ipAddress = $ipAddress;
 			$this->subnetMask = $subnetMask;
@@ -46,7 +46,7 @@ use App\Subnetting\Model,
 			}
 		}
 
-		public function calculateSubnets($offset, $length)
+		public function calculateSubnetworks($offset, $length)
 		{
 			$hosts = $this->mask->getNumberOfHostsProvidedByMask();
 
@@ -99,5 +99,23 @@ use App\Subnetting\Model,
 		{
 			return $this->network;
 		}
+
+		/**
+		 * @return Model\SubnetMask
+		 */
+		public function getSubnetMask()
+		{
+			return $this->subnetMask;
+		}
+
+
+		/**
+		 * @return Model\SubnetMask
+		 */
+		public function getSubnetMask2()
+		{
+			return $this->mask;
+		}
+
 
 	}

@@ -1,0 +1,178 @@
+body {
+  background-color: #203047;
+  color: #D1D6E7;
+}
+#container {
+  float: right;
+  position: relative;
+  right: 50%;
+}
+#wrapper {
+  float: left;
+  position: relative;
+  left: 50%;
+  margin-bottom: 25px;
+}
+#content {
+  background-color: #5D7699;
+  padding: 25px;
+  overflow: auto;
+}
+.menu {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  overflow: auto;
+}
+.menu li {
+  float: left;
+  margin-right: 5px;
+}
+.menu li a {
+  padding: 6px 10px;
+  color: #FFF;
+  display: block;
+  background-color: #A3B9D9;
+  text-decoration: none;
+}
+.menu li a:hover {
+  background-color: #5D7699;
+}
+.menu li a.selected {
+  background-color: #5D7699;
+  padding-bottom: 11px;
+}
+.box {
+  color: #000;
+  background-color: #FFF;
+  margin-top: 25px;
+  padding: 25px;
+  float: left;
+  overflow: auto;
+  clear: both;
+}
+.box table {
+  border-collapse: collapse;
+}
+.box table th,
+.box table td {
+  border: 1px solid #6D778A;
+  padding: 5px;
+}
+.box table th {
+  background-color: #e5e5e5;
+}
+.box table tr:hover {
+  background-color: #DEF0FF;
+}
+#calcForm {
+  float: left;
+}
+.networkInfo {
+  float: right;
+  overflow: auto;
+}
+.networkInfo .box {
+  margin: 0;
+}
+.results {
+  overflow: auto;
+  clear: both;
+}
+.behind {
+  background-color: #FFADC0;
+}
+.subnetting-fail,
+.subnetting-recommendation {
+  width: 400px;
+  background-color: #ffadc0;
+  color: #610016;
+}
+.subnetting-recommendation {
+  background-color: #bef4a9;
+  color: #1b4809;
+}
+.notice {
+  width: 470px;
+  background-color: #fffbe3;
+  border-left: 8px solid #e3c300;
+  color: #635500;
+}
+h1,
+h2,
+h3 {
+  margin: 0;
+  color: #FFF;
+}
+h1 {
+  font-size: 190%;
+}
+h1 a {
+  color: #FFF;
+  text-decoration: none;
+}
+h2 {
+  clear: both;
+}
+h3 {
+  color: #000;
+}
+form input,
+form select {
+  padding: 8px;
+  font-size: 115%;
+}
+form label {
+  color: #D1D6E7;
+}
+form .ipaddress {
+  width: 135px;
+}
+form .subnetmask {
+  width: 210px;
+}
+form .hosts {
+  width: 350px;
+}
+/*
+----- PAGINATOR -----
+*/
+.__paginator {
+  margin: 0;
+  margin-bottom: 10px;
+}
+.p-btn,
+.counter {
+  color: #FFF;
+  background-color: #428BCA;
+  border-color: #357EBD;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+}
+.p-btn:hover {
+  color: #FFF;
+  background-color: #3071A9;
+  border-color: #285E8E;
+}
+.counter {
+  background-color: #d0d0d0;
+  color: #515151;
+}
+.inactive {
+  background-color: #858585;
+}
+.inactive:hover {
+  background-color: #858585;
+}
+@media (max-width: 800px) {
+  .networkInfo {
+    float: left;
+    margin: 15px 0;
+  }
+}

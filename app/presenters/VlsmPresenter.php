@@ -6,10 +6,10 @@ use \Nette\Application\UI\Form,
 	App\Subnetting\Model,
 	App\Subnetting\Model\Calculators,
 	App\Subnetting\Exceptions\LogicExceptions,
-	Components\VisualPaginator,
-	App\Subnetting\Model\Components\NetworkInfo;
+	App\Subnetting\Model\Components\NetworkInfoControl;
+use Tracy\Debugger;
 
-	class VlsmPresenter extends CalculatorPresenter
+class VlsmPresenter extends CalculatorPresenter
 	{
 		const SESSION_SECTION = 'vlsm';
 
@@ -34,36 +34,29 @@ use \Nette\Application\UI\Form,
 
 				$vlsm = $this->session->getSection(self::SESSION_SECTION);
 
-				$this['calculatorForm']['ip']->setDefaultValue($vlsm->ip);
-				$this['calculatorForm']['mask']->setDefaultValue($vlsm->mask);
+				$this['calculatorForm']['ip']->setDefaultValue($vlsm->calculator->getNetwork()->getIpAddress());
+				$this['calculatorForm']['mask']->setDefaultValue($vlsm->calculator->getNetwork()->getSubnetMask()->getPrefix());
 				$this['calculatorForm']['hosts']->setDefaultValue($vlsm->hosts);
 
-				$network = $this->networkFactory->createNetwork($vlsm->ip, $vlsm->mask);
-				$this->vlsmCalculator = new Calculators\VLSMCalculator($network, $vlsm->hosts);
-
-				$paginator = $this['paginator']->getPaginator();
-				$paginator->setItemCount(count($this->vlsmCalculator->getNetworkHosts()));
-				$this->results = $this->vlsmCalculator->getSubnetworks($paginator->getOffset(), $paginator->getLength());
+				$this->vlsmCalculator = $vlsm->calculator;
 			}
 		}
 
 		public function renderCalc()
 		{
 			$this->template->calculator = $this->vlsmCalculator;
-			$this->template->results = $this->results;
 		}
 
-		protected function createComponentPaginator()
+		public function createComponentSubnetworks()
 		{
-			$vp = new VisualPaginator(TRUE);
-			$vp->getPaginator()->setItemsPerPage(10);
+		    $subnetworks = new Model\Components\SubnetworksControl($this->vlsmCalculator);
 
-			return $vp;
+			return $subnetworks;
 		}
 
 		protected function createComponentNetworkInfo()
 		{
-			$networkInfo = new NetworkInfo($this->vlsmCalculator->getNetwork());
+			$networkInfo = new NetworkInfoControl($this->vlsmCalculator->getNetwork());
 
 			return $networkInfo;
 		}
@@ -88,6 +81,8 @@ use \Nette\Application\UI\Form,
 		public function processReset(\Nette\Forms\Controls\Button $form)
 		{
 			$this->session->getSection(self::SESSION_SECTION)->remove();
+			unset($this['subnetworks']['paginator']);
+
 			$this->flashMessage('Kalkulátor byl úspěšně vyresetován.', 'success');
 			$this->redirect('this');
 		}
@@ -103,8 +98,7 @@ use \Nette\Application\UI\Form,
 
 				$vlsm = $this->session->getSection(self::SESSION_SECTION);
 
-				$vlsm->ip = $values['ip'];
-				$vlsm->mask = $values['mask'];
+				$vlsm->calculator = $VLSMCalculator;
 				$vlsm->hosts = $values['hosts'];
 
 				$vlsm->setExpiration(0);

@@ -1,0 +1,195 @@
+body{
+    background-color: #203047;
+    color: #D1D6E7;
+}
+
+@position: 50%;
+#container{
+    float: right;
+    position: relative;
+    right: @position;
+}
+
+#wrapper{
+    float: left;
+    position: relative;
+    left: @position;
+    margin-bottom: 25px;
+}
+
+#content{
+    background-color: #5D7699;
+    padding: 25px;
+    overflow: auto;
+}
+
+.menu{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    overflow: auto;
+
+    li{
+        float: left;
+        margin-right: 5px;
+
+        a{
+            padding: 6px 10px;
+            color: #FFF;
+            display: block;
+            background-color: #A3B9D9;
+            text-decoration: none;
+            &:hover{
+                background-color: #5D7699;
+            }
+        }
+        a.selected{
+            background-color: #5D7699;
+            padding-bottom: 11px;
+        }
+    }
+}
+
+@box_padding: 25px;
+.box{
+    color: #000;
+    background-color: #FFF;
+    margin-top: @box_padding;
+    padding: @box_padding;
+    float: left;
+    overflow: auto;
+    clear: both;
+
+    table{
+        border-collapse: collapse;
+
+        th,
+        td{
+            border: 1px solid #6D778A;
+            padding: 5px;
+        }
+        th{ background-color: #E5E5E5}
+        tr{ &:hover{background-color: #DEF0FF;}}
+    }
+
+}
+
+#calcForm{
+    float: left;
+}
+
+.networkInfo{
+    float: right;
+    overflow: auto;
+
+    .box{ margin: 0;}
+}
+
+.results{
+    overflow: auto;
+    clear: both;
+}
+
+.behind{ background-color: #FFADC0;}
+
+@subnetting-fail-color: #FFADC0;
+@subnetting-recommendation-color: #BEF4A9;
+.subnetting-fail,
+.subnetting-recommendation{
+    width: 400px;
+    background-color: @subnetting-fail-color;
+    color: darken(@subnetting-fail-color, 65%);
+}
+
+.subnetting-recommendation{
+    background-color: @subnetting-recommendation-color;
+    color: darken(@subnetting-recommendation-color, 65%);
+}
+
+@notice-color: #FFFBE3;
+.notice{
+    width: 470px;
+    background-color: @notice-color;
+    border-left: 8px solid darken(@notice-color, 50%);
+    color: darken(@notice-color, 75%);
+}
+
+h1, h2, h3{
+    margin: 0;
+    color: #FFF;
+}
+
+h1{
+    font-size: 190%;
+
+    a{
+        color: #FFF;
+        text-decoration: none;
+    }
+}
+
+h2{ clear: both;}
+h3 { color: #000;}
+
+form{
+    input, select{
+        padding: 8px;
+        font-size: 115%;
+    }
+
+    label{ color: #D1D6E7;}
+    @ip-size: 135px;
+    @mask-size: 210px;
+    .ipaddress{ width: 135px;}
+    .subnetmask{ width: 210px;}
+    .hosts{ width: @ip-size + @mask-size + 5}
+}
+
+/*
+----- PAGINATOR -----
+*/
+
+.__paginator{
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.p-btn,
+.counter{
+    color: #FFF;
+    background-color: #428BCA;
+    border-color: #357EBD;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+}
+
+.p-btn{ &:hover{
+    color: #FFF;
+    background-color: #3071A9;
+    border-color:#285E8E;
+}}
+
+@counter-color: #D0D0D0;
+.counter{
+    background-color: @counter-color;
+    color: darken(@counter-color, 50%);
+}
+
+@btn-inactive-color: #858585;
+.inactive{
+    background-color: @btn-inactive-color;
+    &:hover{ background-color: @btn-inactive-color;}
+}
+
+@media (max-width: 800px) {
+    .networkInfo{
+        float: left;
+        margin: 15px 0;
+    }
+}

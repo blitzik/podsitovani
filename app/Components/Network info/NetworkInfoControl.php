@@ -5,7 +5,7 @@ namespace App\Subnetting\Model\Components;
 use Nette\Application\UI\Control,
 	App\Subnetting\Model;
 
-	class NetworkInfo extends Control
+	class NetworkInfoControl extends Control
 	{
 		/**
 		 *

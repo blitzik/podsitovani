@@ -15,7 +15,6 @@ use Nette\Application\UI\Form,
 		private $network;
 
 
-
 		public function renderDefault()
 		{
 			$this->template->network = $this->network;
@@ -23,7 +22,7 @@ use Nette\Application\UI\Form,
 
 		protected function createComponentNetworkInfo()
 		{
-			$ni = new Model\Components\NetworkInfo($this->network);
+			$ni = new Model\Components\NetworkInfoControl($this->network);
 
 			return $ni;
 		}

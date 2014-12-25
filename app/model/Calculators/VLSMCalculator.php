@@ -6,7 +6,7 @@ use App\Subnetting\Model,
 	App\Subnetting\Exceptions\LogicExceptions,
 	App\Subnetting\Model\Utils\IP;
 
-	class VLSMCalculator extends Calculator
+	class VLSMCalculator extends Calculator implements ICalculator
 	{
 		/**
 		 *
@@ -45,7 +45,7 @@ use App\Subnetting\Model,
 		 * @param int $length
 		 * @return Array
 		 */
-		private function calculateSubnetworks($offset, $length)
+		public function calculateSubnetworks($offset, $length)
 		{
 			$baseAddress = IP::ip2long($this->network->getNetworkAddress());
 			$startAddress = IP::long2ip($baseAddress + $this->calcBlocksFromBeginningToOffset($offset));
@@ -245,6 +245,14 @@ use App\Subnetting\Model,
 		public function getNetworkHosts()
 		{
 			return $this->networkHosts;
+		}
+
+		/**
+		 * @return int
+		 */
+		public function getNumberOfSubnetworks()
+		{
+			return count($this->networkHosts);
 		}
 
 	}

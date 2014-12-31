@@ -26,5 +26,8 @@ services:
 	- App\Subnetting\Model\Factories\Forms\CalculatorFormFactory
 	- App\Subnetting\Model\Factories\Networks\NetworkFactory
 
+	- \Components\IPaginatorFactory
+	- App\Subnetting\Model\Components\ISubnetworksControlFactory
+
 	- App\Subnetting\RouterFactory
 	router: @App\Subnetting\RouterFactory::createRouter

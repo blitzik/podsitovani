@@ -3,11 +3,12 @@
 namespace App\Subnetting\Model\Components;
 
 use App\Subnetting\Model\Calculators\ICalculator;
+use Components\IPaginatorFactory;
 use Components\VisualPaginator;
 use Nette\Application\UI\Control;
 use Nette\InvalidArgumentException;
 
-class SubnetworksControl extends Control
+	class SubnetworksControl extends Control
 	{
 		/**
 		 * @var ICalculator|NULL
@@ -15,7 +16,17 @@ class SubnetworksControl extends Control
 		private $calculator;
 
 
-		public function __construct($calculator)
+		/**
+		 * @var IPaginatorFactory
+		 */
+		private $paginatorFactory;
+
+		public function __construct(IPaginatorFactory $pf)
+		{
+			$this->paginatorFactory = $pf;
+		}
+
+		public function setCalculator($calculator)
 		{
 			if (!($calculator == NULL OR $calculator instanceof ICalculator)) {
 				throw new InvalidArgumentException;
@@ -26,7 +37,7 @@ class SubnetworksControl extends Control
 
 		public function createComponentPaginator()
 		{
-		    $vp = new VisualPaginator(TRUE);
+		    $vp = $this->paginatorFactory->create();
 			$vp->getPaginator()->setItemsPerPage(15);
 
 			return $vp;

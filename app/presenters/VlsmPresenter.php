@@ -21,6 +21,12 @@ class VlsmPresenter extends CalculatorPresenter
 		public $networkFactory;
 
 		/**
+	 	* @var Model\Components\ISubnetworksControlFactory
+		* @inject
+	 	*/
+		public $subnetworksControlFactory;
+
+		/**
 		 *
 		 * @var Calculators\VLSMCalculator
 		 */
@@ -49,7 +55,8 @@ class VlsmPresenter extends CalculatorPresenter
 
 		public function createComponentSubnetworks()
 		{
-		    $subnetworks = new Model\Components\SubnetworksControl($this->vlsmCalculator);
+		    $subnetworks = $this->subnetworksControlFactory->create();
+			$subnetworks->setCalculator($this->vlsmCalculator);
 
 			return $subnetworks;
 		}
@@ -80,10 +87,13 @@ class VlsmPresenter extends CalculatorPresenter
 
 		public function processReset(\Nette\Forms\Controls\Button $form)
 		{
-			$this->session->getSection(self::SESSION_SECTION)->remove();
-			unset($this['subnetworks']['paginator']);
+			if ($this->session->hasSection(self::SESSION_SECTION)) {
+				$this->session->getSection(self::SESSION_SECTION)->remove();
+				unset($this['subnetworks']['paginator']);
 
-			$this->flashMessage('Kalkulátor byl úspěšně vyresetován.', 'success');
+				$this->flashMessage('Kalkulátor byl úspěšně vyresetován.', 'success');
+			}
+
 			$this->redirect('this');
 		}
 

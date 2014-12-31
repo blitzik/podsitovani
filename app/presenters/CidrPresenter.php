@@ -13,6 +13,12 @@ use App\Subnetting\Model,
 		const SESSION_SECTION = 'cidr';
 
 		/**
+		 * @var Model\Components\ISubnetworksControlFactory
+		 * @inject
+		 */
+		public $subnetworksControlFactory;
+
+		/**
 		 *
 		 * @var Calculators\CIDRCalculator
 		 */
@@ -40,7 +46,8 @@ use App\Subnetting\Model,
 
 		public function createComponentSubnetworks()
 		{
-			$subnetworks = new Model\Components\SubnetworksControl($this->cidrCalculator);
+			$subnetworks = $this->subnetworksControlFactory->create();
+			$subnetworks->setCalculator($this->cidrCalculator);
 
 			return $subnetworks;
 		}
@@ -87,10 +94,13 @@ use App\Subnetting\Model,
 
 		public function processReset(\Nette\Forms\Controls\Button $form)
 		{
-			$this->session->getSection(self::SESSION_SECTION)->remove();
-			unset($this['subnetworks']['paginator']);
+			if ($this->session->hasSection(self::SESSION_SECTION)) {
+				$this->session->getSection(self::SESSION_SECTION)->remove();
+				unset($this['subnetworks']['paginator']);
 
-			$this->flashMessage('Kalkulátor byl úspěšně vyresetován.', 'success');
+				$this->flashMessage('Kalkulátor byl úspěšně vyresetován.', 'success');
+			}
+
 			$this->redirect('this');
 		}
 

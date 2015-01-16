@@ -15,7 +15,7 @@
 
 		{foreach $masks as $mask}
 			<tr><td>/{$mask->getPrefix()}</td>
-				<td><a title="{$mask->getAddressInBinary()}">{$mask->getAddress()}</a></td>
+				<td title="{$mask->getAddressInBinary()}">{$mask->getAddress()}</td>
 				<td>{$mask->getNumberOfHostsProvidedByMask()|number:0:',':' '}</td>
 				<td>{$mask->getNumberOfHostsProvidedByMask() - 2|number:0:',':' '}</td></tr>
 		{/foreach}

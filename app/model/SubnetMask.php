@@ -146,7 +146,7 @@ use \Nette\Utils\Validators,
 		 */
 		private function isPrefixValid($cidr)
 		{
-			if (!preg_match('~^\/?([1-9]|1[0-9]{1}|2[0-9]{1}|30)$~', $cidr)) {
+			if (!preg_match('~^\/?(([12]?[1-9]{1})|([123]0))$~', $cidr)) {
 				return FALSE;
 			}
 

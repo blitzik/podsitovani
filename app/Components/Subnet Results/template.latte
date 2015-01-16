@@ -14,11 +14,11 @@
 						<td>{$subnet->getHosts()-2|number:0:',':' '} <small>(+2)</small></td>
 						<td>{$subnet->getBlockOfAddresses()|number:0:',':' '}</td>
 						<td>/{$subnet->getSubnetMask()->getPrefix()}</td>
-						<td><a title="{$subnet->getSubnetMask()->getAddressInBinary()}">{$subnet->getSubnetMask()}</a></td>
-						<td><a title="{$subnet->getNetworkAddress()->getAddressInBinary()}">{$subnet->getNetworkAddress()}</a></td>
-						<td><a title="{$subnet->getBroadcastAddress()->getAddressInBinary()}">{$subnet->getBroadcastAddress()}</a></td>
-						<td><a title="{$subnet->getFirstValidHost()->getAddressInBinary()}">{$subnet->getFirstValidHost()}</a> -
-							<a title="{$subnet->getLastValidHost()->getAddressInBinary()}">{$subnet->getLastValidHost()}</a></td>
+						<td title="{$subnet->getSubnetMask()->getAddressInBinary()}">{$subnet->getSubnetMask()}</td>
+						<td title="{$subnet->getNetworkAddress()->getAddressInBinary()}">{$subnet->getNetworkAddress()}</td>
+						<td title="{$subnet->getBroadcastAddress()->getAddressInBinary()}">{$subnet->getBroadcastAddress()}</td>
+						<td title="{$subnet->getFirstValidHost()->getAddressInBinary()} - {$subnet->getLastValidHost()->getAddressInBinary()}">
+									  {$subnet->getFirstValidHost()} - {$subnet->getLastValidHost()}</td>
 					</tr>
 				{/foreach}
 

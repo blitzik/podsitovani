@@ -52,12 +52,16 @@ body{
 
 @box_padding: 25px;
 .box{
-    color: #000;
-    background-color: #FFF;
-    margin-top: @box_padding;
-    padding: @box_padding;
     float: left;
     overflow: auto;
+    margin-top: @box_padding;
+    padding: @box_padding;
+}
+
+.tableBox{
+    .box;
+    color: #000;
+    background-color: #FFF;
     clear: both;
 
     table{
@@ -71,7 +75,6 @@ body{
         th{ background-color: #E5E5E5}
         tr{ &:hover{background-color: #DEF0FF;}}
     }
-
 }
 
 #calcForm{
@@ -96,14 +99,16 @@ body{
 @subnetting-recommendation-color: #BEF4A9;
 .subnetting-fail,
 .subnetting-recommendation{
-    width: 400px;
+    width: 365px;
     background-color: @subnetting-fail-color;
     color: darken(@subnetting-fail-color, 65%);
+    margin-right: 20px;
 }
 
 .subnetting-recommendation{
     background-color: @subnetting-recommendation-color;
     color: darken(@subnetting-recommendation-color, 65%);
+    margin-right: 0;
 }
 
 @notice-color: #FFFBE3;
@@ -112,6 +117,7 @@ body{
     background-color: @notice-color;
     border-left: 8px solid darken(@notice-color, 50%);
     color: darken(@notice-color, 75%);
+    clear: both;
 }
 
 h1, h2, h3{

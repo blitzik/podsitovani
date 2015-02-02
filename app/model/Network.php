@@ -189,6 +189,10 @@ use App\Subnetting\Model\Utils\IP;
 
 			$ipDec = IP::ip2long($ipAddress);
 
+			if ($ipAddress ) {
+
+			}
+
 			return (($ipDec >= $firstDec AND $ipDec <= $lastDec) ? TRUE : FALSE);
 		}
 

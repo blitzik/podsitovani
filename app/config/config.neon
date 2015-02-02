@@ -23,11 +23,17 @@ nette:
 
 services:
 
+	# Factories
 	- App\Subnetting\Model\Factories\Forms\CalculatorFormFactory
 	- App\Subnetting\Model\Factories\Networks\NetworkFactory
-
 	- \Components\IPaginatorFactory
-	- App\Subnetting\Model\Components\ISubnetworksControlFactory
+	- App\Subnetting\Model\Calculators\CalculatorFactory
 
+	subnetworksControlFactory:
+		implement: App\Subnetting\Model\Components\ISubnetworksControlFactory
+		parameters: [App\Subnetting\Model\Calculators\Parameters parameters]
+		arguments: [%parameters%]
+
+	# Router
 	- App\Subnetting\RouterFactory
 	router: @App\Subnetting\RouterFactory::createRouter

@@ -1,8 +1,20 @@
-{if $calculator}
 <div class="results">
+	{if $calculator instanceof App\Subnetting\Model\Calculators\VLSMCalculator}
+	{if !$calculator->isNetworkRangeBigEnough()}
+	<p class="box subnetting-fail" style="display: none;">
+		Podsíťování selhalo! Maska <b>{$calculator->getNetwork()->getSubnetMask()}</b> neposkytuje dostatečné
+		množství adres pro vytvoření všech podsítí.
+	</p>
+
+	<p class="box subnetting-recommendation" style="display: none;">
+		Pro vytvoření všech podsítí snižte počet požadovaných hostů
+		nebo využijte masky, která poskytne dostatečné množství adres.
+		Např: <b>/{$calculator->getRecommendedSubnetMask()->getPrefix()} [{$calculator->getRecommendedSubnetMask()}]</b></p>
+	{/if}
+	{/if}
 
 		<h2>Podsítě</h2>
-		<div class="box">
+		<div class="tableBox">
 			{control paginator}
 			<table>
 				<tr><th>Hostů v síti</th><th>Blok adres</th><th>Prefix</th><th>Maska</th>
@@ -25,4 +37,3 @@
 			</table>
 		</div>
 </div>
-{/if}

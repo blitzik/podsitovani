@@ -34,6 +34,10 @@ namespace App\Subnetting\Exceptions\LogicExceptions;
 	{
 	}
 
+	class InvalidHostsFormatException extends \LogicException
+	{
+	}
+
 	class InvalidNumberOfHostsException extends \LogicException
 	{
 	}

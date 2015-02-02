@@ -75,9 +75,9 @@ use App\Subnetting\Model\Address;
 		 * @param int $hosts
 		 * @return int
 		 */
-		public static function calcBlockOfAddresses($hosts)
+		public static function calcNumberOfAddressesInBlock($hosts)
 		{
-			return (int)pow(2, (ceil(log($hosts, 2))));
+			return pow(2, (ceil(log($hosts, 2))));
 		}
 
 	}

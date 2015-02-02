@@ -32,18 +32,12 @@ use App\Subnetting\Model,
 		private $network;
 
 
-		public function __construct(Model\IpAddress $ipAddress,
-									Model\SubnetMask $subnetMask,
-									Model\SubnetMask $mask)
+		public function __construct(CIDRParameters $parameters)
 		{
-			$this->ipAddress = $ipAddress;
-			$this->subnetMask = $subnetMask;
-			$this->mask = $mask;
-			$this->network = new Model\Network($ipAddress, $subnetMask);
-
-			if ($subnetMask->getPrefix() >= $mask->getPrefix()) {
-				throw new \App\Subnetting\Exceptions\LogicExceptions\CIDRSubnetMaskRangeException;
-			}
+			$this->ipAddress = $parameters->ipAddress;
+			$this->subnetMask = $parameters->subnetMask;
+			$this->mask = $parameters->subnetMask2;
+			$this->network = $parameters->network;
 		}
 
 		public function calculateSubnetworks($offset, $length)
@@ -116,6 +110,5 @@ use App\Subnetting\Model,
 		{
 			return $this->mask;
 		}
-
 
 	}

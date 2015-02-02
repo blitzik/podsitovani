@@ -7,9 +7,8 @@ use \Nette\Application\UI\Form,
 	App\Subnetting\Model\Calculators,
 	App\Subnetting\Exceptions\LogicExceptions,
 	App\Subnetting\Model\Components\NetworkInfoControl;
-use Tracy\Debugger;
 
-class VlsmPresenter extends CalculatorPresenter
+	class VlsmPresenter extends CalculatorPresenter
 	{
 		const SESSION_SECTION = 'vlsm';
 
@@ -26,13 +25,11 @@ class VlsmPresenter extends CalculatorPresenter
 	 	*/
 		public $subnetworksControlFactory;
 
-		/**
-		 *
-		 * @var Calculators\VLSMCalculator
-		 */
-		private $vlsmCalculator;
 
-		private $results;
+		/**
+		 * @var Calculators\Parameters
+		 */
+		private $parameters;
 
 		public function actionCalc()
 		{
@@ -40,30 +37,29 @@ class VlsmPresenter extends CalculatorPresenter
 
 				$vlsm = $this->session->getSection(self::SESSION_SECTION);
 
-				$this['calculatorForm']['ip']->setDefaultValue($vlsm->calculator->getNetwork()->getIpAddress());
-				$this['calculatorForm']['mask']->setDefaultValue($vlsm->calculator->getNetwork()->getSubnetMask()->getPrefix());
+				$this['calculatorForm']['ip']->setDefaultValue($vlsm->parameters->getNetwork()->getIpAddress());
+				$this['calculatorForm']['mask']->setDefaultValue($vlsm->parameters->getNetwork()->getSubnetMask()->getPrefix());
 				$this['calculatorForm']['hosts']->setDefaultValue($vlsm->hosts);
 
-				$this->vlsmCalculator = $vlsm->calculator;
+				$this->parameters = $vlsm->parameters;
 			}
 		}
 
 		public function renderCalc()
 		{
-			$this->template->calculator = $this->vlsmCalculator;
+			$this->template->isSet = isset($this->parameters) ? TRUE : FALSE;
 		}
 
 		public function createComponentSubnetworks()
 		{
-		    $subnetworks = $this->subnetworksControlFactory->create();
-			$subnetworks->setCalculator($this->vlsmCalculator);
+		    $subnetworks = $this->subnetworksControlFactory->create($this->parameters);
 
 			return $subnetworks;
 		}
 
 		protected function createComponentNetworkInfo()
 		{
-			$networkInfo = new NetworkInfoControl($this->vlsmCalculator->getNetwork());
+			$networkInfo = new NetworkInfoControl($this->parameters->getNetwork());
 
 			return $networkInfo;
 		}
@@ -102,14 +98,13 @@ class VlsmPresenter extends CalculatorPresenter
 			$values = $form->getValues();
 
 			try {
-				$network = $this->networkFactory->createNetwork($values['ip'], $values['mask']);
 
-				$VLSMCalculator = new Calculators\VLSMCalculator($network, $values['hosts']);
+				$parameters = new Calculators\VLSMParameters($values->ip, $values->mask, $values->hosts);
 
 				$vlsm = $this->session->getSection(self::SESSION_SECTION);
 
-				$vlsm->calculator = $VLSMCalculator;
-				$vlsm->hosts = $values['hosts'];
+				$vlsm->parameters = $parameters;
+				$vlsm->hosts = $values->hosts;
 
 				$vlsm->setExpiration(0);
 
@@ -119,11 +114,14 @@ class VlsmPresenter extends CalculatorPresenter
 
 				$form->addError('IP adresa nemá platný formát.');
 				return;
+			} catch (LogicExceptions\InvalidHostsFormatException $ihf) {
+
+				$form->addError('Neplatný formát zadaných hostů. Lze zadávat pouze přirozená čísla.');
+				return;
 			} catch (LogicExceptions\InvalidNumberOfHostsException $inoh) {
 
-				$form->addError('Neplatný formát zadaných hostů');
+				$form->addError('Požadovaný počet hostů přesahuje rozsah adres IPv4.');
 				return;
 			}
 		}
-
 	}

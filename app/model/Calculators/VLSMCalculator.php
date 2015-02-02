@@ -9,6 +9,17 @@ use App\Subnetting\Model,
 	class VLSMCalculator extends Calculator implements ICalculator
 	{
 		/**
+		 * @var Model\IpAddress
+		 */
+		private $ipAddress;
+
+
+		/**
+		 * @var Model\SubnetMask
+		 */
+		private $subnetMask;
+
+		/**
 		 *
 		 * @var Model\Network
 		 */
@@ -26,17 +37,13 @@ use App\Subnetting\Model,
 		 */
 		private $subnetworks = array();
 
-		public function __construct(Model\Network $network, $networksHosts)
+
+		public function __construct(VLSMParameters $parameters)
 		{
-			$this->network = $network;
-
-			$hosts = $this->separateNumberOfHosts($networksHosts);
-			if (!$this->areHostsValid($hosts)) {
-				throw new LogicExceptions\InvalidNumberOfHostsException('Only whole numbers bigger than 0 are allowed.');
-			}
-
-			$this->networkHosts = $this->prepareValidNumberOfHosts($hosts);
-			rsort($this->networkHosts);
+			$this->ipAddress = $parameters->ipAddress;
+			$this->subnetMask = $parameters->subnetMask;
+			$this->network = $parameters->network;
+			$this->networkHosts = $parameters->networksHosts;
 		}
 
 		/**
@@ -68,7 +75,7 @@ use App\Subnetting\Model,
 		{
 			$totalAddresses = 0;
 			for ($i = 0; $i < $offset; $i++) {
-				$totalAddresses += IP::calcBlockOfAddresses($this->networkHosts[$i]);
+				$totalAddresses += IP::calcNumberOfAddressesInBlock($this->networkHosts[$i]);
 			}
 
 			return $totalAddresses;
@@ -83,6 +90,7 @@ use App\Subnetting\Model,
 		private function calcNextSubnet(\App\Subnetting\Model\IpAddress $ipAddress, $hosts)
 		{
 			$cidr = $this->calcCIDRbasedOnNumberOfHosts($hosts);
+			// TODO: tady to taky umre
 			$subnetMask = new Model\SubnetMask($cidr);
 
 			return  new Model\Subnetwork($ipAddress, $subnetMask, $hosts);
@@ -93,7 +101,7 @@ use App\Subnetting\Model,
 		 * @param int $number
 		 * @return int
 		 */
-		private function calcCIDRbasedOnNumberOfHosts($number)
+		public function calcCIDRbasedOnNumberOfHosts($number)
 		{
 			return (int)(32 - ceil(log($number, 2)));
 		}
@@ -104,11 +112,21 @@ use App\Subnetting\Model,
 		 */
 		public function getTotalNumberOfHostsInBlocks()
 		{
-			$boa = $this->getTotalNumberOfBlockAddresses();
+			$boa = $this->getTotalNumberOfAddressesInBlocks();
 
 			return (int)($boa - (2 * count($this->networkHosts)));
 		}
 
+		#TODO
+		/*
+				IP: 192.168.0.10 | M: 255.255.255.0
+				Hosts: 2147483644
+
+				IP: 192.168.0.10 | M: 255.255.255.0
+				Hosts: 314, 45, 19, 1340000000
+
+				Chyba, protože maska v podsíti nepobere tolik hostů
+		 */
 
 		/**
 		 * @return Model\SubnetMask
@@ -116,9 +134,10 @@ use App\Subnetting\Model,
 		public function getRecommendedSubnetMask()
 		{
 			$numberOfHostsProvidedByMask = $this->network->getSubnetMask()->getNumberOfHostsProvidedByMask();
-			if ($numberOfHostsProvidedByMask < $this->getTotalNumberOfBlockAddresses()) {
+			if ($numberOfHostsProvidedByMask < $this->getTotalNumberOfAddressesInBlocks()) {
 
-				$cidr = 32 - ceil(log(IP::calcBlockOfAddresses($this->getTotalNumberOfBlockAddresses()), 2));
+				$cidr = 32 - ceil(log(IP::calcNumberOfAddressesInBlock($this->getTotalNumberOfAddressesInBlocks()), 2));
+				// $cidr vyjde 0 nebo bude zápornej = maska to nepobere a chcipne to vyjímkou
 				return new Model\SubnetMask($cidr);
 			}
 
@@ -138,24 +157,24 @@ use App\Subnetting\Model,
 		 *
 		 * @return int
 		 */
-		public function getTotalNumberOfBlockAddresses()
+		public function getTotalNumberOfAddressesInBlocks()
 		{
-			$blockOfAddresses = 0;
+			$addressesInBlocks = 0;
 			foreach ($this->networkHosts as $hosts) {
-				$blockOfAddresses += pow(2, (ceil(log($hosts, 2))));
+				$addressesInBlocks += IP::calcNumberOfAddressesInBlock($hosts);
 			}
 
-			return (int)$blockOfAddresses;
+			return $addressesInBlocks;
 		}
 
 		/**
 		 *
 		 * @return array
 		 */
-		public function getSubnetworks($offset, $length)
+		/*public function getSubnetworks($offset, $length)
 		{
 			return $this->calculateSubnetworks($offset, $length);
-		}
+		}*/
 
 		/**
 		 *
@@ -174,27 +193,11 @@ use App\Subnetting\Model,
 		 */
 		public function getSubnettedNetworkAddressSpaceUsed()
 		{
-			$percentage = $this->getTotalNumberOfGivenHosts() / ($this->getTotalNumberOfBlockAddresses() - (2 * count($this->networkHosts))) * 100;
+			$percentage = $this->getTotalNumberOfGivenHosts() / ($this->getTotalNumberOfAddressesInBlocks() - (2 * count($this->networkHosts))) * 100;
 
 			return number_format($percentage, 1, ',', ' ');
 		}
 
-		/**
-		 *
-		 * @param array $hosts
-		 * @return boolean Returns TRUE if hosts have valid format, otherwise FALSE
-		 */
-		private function areHostsValid(array $hosts)
-		{
-			foreach ($hosts as $host) {
-				$host = trim($host);
-				if (!ctype_digit($host) OR $host == 0) {
-					return FALSE;
-				}
-			}
-
-			return TRUE;
-		}
 
 		/**
 		 *
@@ -207,26 +210,6 @@ use App\Subnetting\Model,
 			}
 
 			return TRUE;
-		}
-
-		/**
-		 *
-		 * @param array $hosts
-		 * @return array
-		 */
-		private function prepareValidNumberOfHosts(array $hosts)
-		{
-			return array_map(function ($host) { return $host + 2;}, $hosts);
-		}
-
-		/**
-		 *
-		 * @param String $hosts
-		 * @return array
-		 */
-		private function separateNumberOfHosts($hosts)
-		{
-			return explode(',', $hosts);
 		}
 
 		/**

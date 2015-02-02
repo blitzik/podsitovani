@@ -20,9 +20,9 @@ use App\Subnetting\Model,
 
 		/**
 		 *
-		 * @var Calculators\CIDRCalculator
+		 * @var Calculators\Parameters
 		 */
-		private $cidrCalculator;
+		private $parameters;
 
 		public function actionCalc()
 		{
@@ -30,31 +30,30 @@ use App\Subnetting\Model,
 
 				$cidr = $this->session->getSection(self::SESSION_SECTION);
 
-				$this['calculatorForm']['ip']->setDefaultValue($cidr->calculator->getNetwork()->getIpAddress());
-				$this['calculatorForm']['mask']->setDefaultValue($cidr->calculator->getSubnetMask()->getPrefix());
-				$this['calculatorForm']['mask2']->setDefaultValue($cidr->calculator->getSubnetMask2()->getPrefix());
+				$this['calculatorForm']['ip']->setDefaultValue($cidr->parameters->getNetwork()->getIpAddress());
+				$this['calculatorForm']['mask']->setDefaultValue($cidr->parameters->getSubnetMask()->getPrefix());
+				$this['calculatorForm']['mask2']->setDefaultValue($cidr->parameters->getSubnetMask2()->getPrefix());
 
-				$this->cidrCalculator = $cidr->calculator;
+				$this->parameters = $cidr->parameters;
 			}
 		}
 
 		public function renderCalc()
 		{
 			$this->template->_form = $this['calculatorForm'];
-			$this->template->calculator = $this->cidrCalculator;
+			$this->template->isSet = isset($this->parameters) ? TRUE : FALSE;
 		}
 
 		public function createComponentSubnetworks()
 		{
-			$subnetworks = $this->subnetworksControlFactory->create();
-			$subnetworks->setCalculator($this->cidrCalculator);
+			$subnetworks = $this->subnetworksControlFactory->create($this->parameters);
 
 			return $subnetworks;
 		}
 
 		protected function createComponentNetworkInfo()
 		{
-			$networkInfo = new Components\NetworkInfoControl($this->cidrCalculator->getNetwork());
+			$networkInfo = new Components\NetworkInfoControl($this->parameters->getNetwork());
 
 			return $networkInfo;
 		}
@@ -115,13 +114,11 @@ use App\Subnetting\Model,
 			}
 
 			try {
-				$cidrCalculator = new Calculators\CIDRCalculator(new Model\IpAddress($values['ip']),
-																new Model\SubnetMask($values['mask']),
-																new Model\SubnetMask($values['mask2']));
+				$parameters = new Calculators\CIDRParameters($values['ip'], $values['mask'], $values['mask2']);
 
 				$cidr = $this->session->getSection(self::SESSION_SECTION);
 
-				$cidr->calculator = $cidrCalculator;
+				$cidr->parameters = $parameters;
 
 				$cidr->setExpiration(0);
 

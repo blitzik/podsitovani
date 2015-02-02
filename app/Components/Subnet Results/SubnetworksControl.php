@@ -2,16 +2,17 @@
 
 namespace App\Subnetting\Model\Components;
 
+use App\Subnetting\Exceptions\LogicExceptions\PrefixOutOfRangeException;
+use App\Subnetting\Model\Calculators\CalculatorFactory;
 use App\Subnetting\Model\Calculators\ICalculator;
+use App\Subnetting\Model\Calculators\Parameters;
 use Components\IPaginatorFactory;
-use Components\VisualPaginator;
 use Nette\Application\UI\Control;
-use Nette\InvalidArgumentException;
 
 	class SubnetworksControl extends Control
 	{
 		/**
-		 * @var ICalculator|NULL
+		 * @var ICalculator
 		 */
 		private $calculator;
 
@@ -21,18 +22,12 @@ use Nette\InvalidArgumentException;
 		 */
 		private $paginatorFactory;
 
-		public function __construct(IPaginatorFactory $pf)
+
+		public function __construct(Parameters $parameters, IPaginatorFactory $pf, CalculatorFactory $calculatorFactory)
 		{
 			$this->paginatorFactory = $pf;
-		}
 
-		public function setCalculator($calculator)
-		{
-			if (!($calculator == NULL OR $calculator instanceof ICalculator)) {
-				throw new InvalidArgumentException;
-			}
-
-			$this->calculator = $calculator;
+			$this->calculator = $calculatorFactory->createCalculator($parameters);
 		}
 
 		public function createComponentPaginator()
@@ -49,13 +44,19 @@ use Nette\InvalidArgumentException;
 
 			$template->setFile(__DIR__ . '/template.latte');
 
-			if ($this->calculator) {
-				$paginator = $this['paginator']->getPaginator();
-				$paginator->setItemCount($this->calculator->getNumberOfSubnetworks());
-				$template->results = $this->calculator->calculateSubnetworks($paginator->getOffset(), $paginator->getLength());
-			}
+			$paginator = $this['paginator']->getPaginator();
+			$paginator->setItemCount($this->calculator->getNumberOfSubnetworks());
 
 			$template->calculator = $this->calculator;
+
+			try {
+					$template->results = $this->calculator->calculateSubnetworks($paginator->getOffset(), $paginator->getLength());
+
+			} catch (PrefixOutOfRangeException $p) {
+				$template->setFile(__DIR__ . '/error.latte');
+			}
+
+			//dump($this->calculator->getTotalNumberOfAddressesInBlocks());
 
 			$template->render();
 		}

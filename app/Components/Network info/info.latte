@@ -1,4 +1,5 @@
-<div class="box">
+{if $network}
+<div class="tableBox">
 	<table>
 		<tr><th>Typ</th><td>{if $network->isPrivate()}Privátní{else}Veřejná{/if} IP</td></tr>
 		<tr><th>IP adresa</th><td title="{$network->getIpAddress()->getAddressInBinary()}">{$network->getIpAddress()}</td></tr>
@@ -12,3 +13,4 @@
 		<tr><th>Max. hostů</th><td>{$network->getNumberOfValidHosts()|number:0:',':' '}</td></tr>
 		</table>
 </div>
+{/if}

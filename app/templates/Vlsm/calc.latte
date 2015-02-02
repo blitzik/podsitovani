@@ -11,22 +11,9 @@
 			<tr><td colspan="2">{input hosts}</td></tr>
 			<tr><td colspan="2">{input send} {input reset}</td></tr>
 		</table>
-
-	{if $calculator}
-		{if !$calculator->isNetworkRangeBigEnough()}
-			<p class="box subnetting-fail">
-				Podsíťování selhalo! Maska <b>{$calculator->getNetwork()->getSubnetMask()}</b> neposkytuje dostatečné
-				množství adres pro vytvoření všech podsítí.
-			</p>
-			<p class="box subnetting-recommendation">
-				Pro vytvoření všech podsítí snižte počet požadovaných hostů
-				nebo využijte masky, která poskytne dostatečné množství adres.
-				Např: <b>/{$calculator->getRecommendedSubnetMask()->getPrefix()} [{$calculator->getRecommendedSubnetMask()}]</b></p>
-		{/if}
-	{/if}
 	{/form calculatorForm}
 
-	{if $calculator}
+	{if $isSet}
 	<div class="networkInfo">
 		{control networkInfo}
 	</div>

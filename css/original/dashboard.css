@@ -43,26 +43,32 @@ body {
   padding-bottom: 11px;
 }
 .box {
-  color: #000;
-  background-color: #FFF;
-  margin-top: 25px;
-  padding: 25px;
   float: left;
   overflow: auto;
+  margin-top: 25px;
+  padding: 25px;
+}
+.tableBox {
+  float: left;
+  overflow: auto;
+  margin-top: 25px;
+  padding: 25px;
+  color: #000;
+  background-color: #FFF;
   clear: both;
 }
-.box table {
+.tableBox table {
   border-collapse: collapse;
 }
-.box table th,
-.box table td {
+.tableBox table th,
+.tableBox table td {
   border: 1px solid #6D778A;
   padding: 5px;
 }
-.box table th {
+.tableBox table th {
   background-color: #e5e5e5;
 }
-.box table tr:hover {
+.tableBox table tr:hover {
   background-color: #DEF0FF;
 }
 #calcForm {
@@ -84,19 +90,22 @@ body {
 }
 .subnetting-fail,
 .subnetting-recommendation {
-  width: 400px;
+  width: 365px;
   background-color: #ffadc0;
   color: #610016;
+  margin-right: 20px;
 }
 .subnetting-recommendation {
   background-color: #bef4a9;
   color: #1b4809;
+  margin-right: 0;
 }
 .notice {
   width: 470px;
   background-color: #fffbe3;
   border-left: 8px solid #e3c300;
   color: #635500;
+  clear: both;
 }
 h1,
 h2,
